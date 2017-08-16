@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mworld.login.dao.UserDao">
+
+    <select id="initUser" resultMap="userMapDetail">
+        SELECT
+        u.id,
+        u.acct,
+        u.name,
+        u.role,
+        m.menu_no `menus.menuNo`,
+        m.menu_name `menus.menuName`,
+        m.menu_url `menus.url` ,
+        m.p_menu_no `menus.pMenuNo`
+        FROM USER u
+        RIGHT JOIN acess a
+        ON u.role=a.role
+        INNER JOIN menu m
+        ON a.menu_no=m.menu_no
+        WHERE u.acct=#{acct}
+        AND u.pwd=md5(#{pwd})
+    </select>
+
+    <insert id="registUser" parameterType="User">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            SELECT replace(uuid(), '-', '') FROM dual;
+        </selectKey>
+        INSERT INTO user VALUES (
+        #{id, jdbcType=VARCHAR},
+        #{acct,jdbcType=VARCHAR},
+        md5(#{pwd,jdbcType=VARCHAR}),
+        #{name,jdbcType=VARCHAR},
+        #{role,jdbcType=TINYINT},
+        now()
+        )
+
+    </insert>
+
+    <select id="findUserByAcct" resultMap="userMap">
+        select
+        u.id `id`,
+        u.acct `acct`,
+        u.name `name`,
+        u.role `role`,
+        u.rgt_time `rgt_time`
+        from user u WHERE u.acct=#{acct} and u.pwd=md5(#{pwd});
+    </select>
+
+    <select id="checkUser" resultType="int">
+        select COUNT(1) FROM user WHERE acct=#{acct}
+    </select>
+
+    <update id="updatePwdById">
+        UPDATE user SET pwd=md5(#{newPwd}) WHERE id=#{id} AND role=#{tagRole}
+    </update>
+
+    <resultMap id="userMap" type="User">
+        <id property="id" column="id"/>
+        <result property="acct" column="acct"/>
+        <result property="name" column="name"/>
+        <result property="role" column="role"/>
+        <result property="rgtTime" column="rgt_time"/>
+    </resultMap>
+
+    <resultMap id="userMapDetail" type="User">
+        <id property="id" column="id"/>
+        <result property="acct" column="acct"/>
+        <result property="name" column="name"/>
+        <result property="role" column="role"/>
+        <result property="rgtTime" column="rgt_time"/>
+        <collection property="menus" ofType="Menu">
+            <id property="menuNo" column="menus.menuNo"/>
+            <result property="menuName" column="menus.menuName"/>
+            <result property="url" column="menus.url"/>
+            <result property="pMenuNo" column="menus.pMenuNo"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUsers" resultMap="userMap">
+        SELECT
+        u.id `id`,
+        u.acct `acct`,
+        u.name `name`,
+        u.role `role`,
+        u.rgt_time `rgt_time`
+        FROM user u
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND acct LIKE concat('%', concat(#{keyword}, '%'))
+                OR name LIKE concat('%', concat(#{keyword}, '%'))
+            </if>
+            <if test="role != null and role != ''">
+                AND role=#{role}
+            </if>
+        </where>
+        ORDER BY rgt_time DESC
+    </select>
+
+    <select id="findUsersCnt" resultType="int">
+        SELECT
+        COUNT(id)
+        FROM user u
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND acct LIKE concat('%', concat(#{keyword}, '%'))
+                OR name LIKE concat('%', concat(#{keyword}, '%'))
+            </if>
+            <if test="role != null and role != ''">
+                AND role=#{role}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateUserRole">
+        UPDATE user SET
+        role=#{newRole}
+        WHERE id=#{id}
+        <if test="tagRole != null and tagRole != ''">
+            AND role=#{tagRole}
+        </if>
+    </update>
+</mapper>

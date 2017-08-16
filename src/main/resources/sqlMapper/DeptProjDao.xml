@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mworld.resume.dao.DeptProjDao">
+
+    <insert id="saveDpt" parameterType="String">
+        INSERT INTO department(dpt_name) VALUE(#{dptName});
+    </insert>
+
+    <insert id="savePrj" parameterType="String">
+        INSERT INTO project(pro_name) VALUE(#{proName});
+    </insert>
+
+    <insert id="saveDptPrj">
+        INSERT INTO dpt_prj_mid(dpt_name,pro_name) VALUES (#{dptName},#{proName})
+    </insert>
+
+    <select id="findPrjOfDpt" resultType="String">
+        SELECT p.pro_name FROM project p
+        RIGHT JOIN dpt_prj_mid m ON p.id=m.prj_id
+        WHERE m.dpt_id=#{dptId}
+    </select>
+
+    <select id="findDptCntByName" resultType="int">
+        select count(1) from department WHERE dpt_name=#{dptName};
+    </select>
+
+    <select id="findPrjCntByName" resultType="int">
+        select count(1) from project WHERE pro_name=#{proName};
+    </select>
+
+    <select id="findDptCntPrj" resultType="int">
+        SELECT COUNT(1)
+        FROM dpt_prj_mid m
+        LEFT JOIN department d ON m.dpt_id=d.id
+        LEFT JOIN project p ON m.prj_id=p.id
+        WHERE d.dpt_name=#{dptName}
+        AND p.pro_name=#{proName}
+    </select>
+
+
+</mapper>

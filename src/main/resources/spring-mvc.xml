@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/mvc"
+       xmlns:contex="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+
+    <!--<mvc:resources mapping="/images/" location="images/**"/>-->
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+
+
+    <contex:component-scan base-package="com.mworld.*.controller" />
+
+    <mvc:interceptors>
+    <mvc:interceptor>
+        <mvc:mapping path="/"/>
+        <mvc:mapping path="/**"/>
+        <mvc:exclude-mapping path="/login"/>
+        <mvc:exclude-mapping path="/home"/>
+        <mvc:exclude-mapping path="/logout"/>
+        <mvc:exclude-mapping path="/register"/>
+        <mvc:exclude-mapping path="/doRegister"/>
+        <mvc:exclude-mapping path="/resume/*"/>
+        <mvc:exclude-mapping path="/*/view"/>
+        <mvc:exclude-mapping path="/css/**"/>
+        <mvc:exclude-mapping path="/bootstrap-3.3.5-dist/**"/>
+        <mvc:exclude-mapping path="/js/**"/>
+        <mvc:exclude-mapping path="/images/**"/>
+        <mvc:exclude-mapping path="/webuploader-0.1.5/**"/>
+        <bean class="com.mworld.login.interceptor.LoginInterceptor"/>
+    </mvc:interceptor>
+</mvc:interceptors>
+
+    <aop:aspectj-autoproxy/>
+    <contex:component-scan base-package="com.mworld.*.interceptor" />
+
+
+    <!--<bean id="log_Aop" class="com.bolom.aop.logAop" />-->
+    <!--<aop:config>-->
+    <!--&lt;!&ndash;<aop:aspect id="timeAop" order="2" ref="log_Aop">&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:pointcut id="allMethods" expression="execution(* com.bolom.service.*(..))"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:before method="showTime" pointcut-ref="allMethods"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</aop:aspect>&ndash;&gt;-->
+    <!--<aop:pointcut id="mylogAop" expression="execution(public * com.bolom.service.*.*(..))"/>-->
+    <!--<aop:advisor advice-ref="log_Aop" pointcut-ref="mylogAop"/>-->
+    <!--</aop:config>-->
+
+    <!--<aop:aspectj-autoproxy/>-->
+
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+    <!--<property name="defaultEncoding" value="UTF-8"/>-->
+    <!--<property name="maxUploadSize" value="104857600"/>-->
+    <!--<property name="maxInMemorySize" value="4096"/>-->
+    <!--</bean>-->
+</beans>
