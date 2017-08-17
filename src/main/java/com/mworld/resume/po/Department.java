@@ -19,4 +19,11 @@ public class Department {
     public void setDptName(String dptName) {
         this.dptName = dptName;
     }
+
+    public Department() {
+    }
+
+    public Department(String dptName) {
+        this.dptName = dptName;
+    }
 }

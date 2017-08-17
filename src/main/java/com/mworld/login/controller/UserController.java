@@ -123,16 +123,16 @@ public class UserController extends BaseController {
         if ("reset".equals(opt))
             findRole = loginUser.getRole() + 1;
         Integer counts = userService.findUsersCnt(keyword, findRole);
-        if (counts == null || counts < 0) {
+        if (counts == null || counts < 1) {
             responseMsg(response, new Message(false, Const.NO_USER_DATA));
             return;
         }
         List<User> list = userService.findUsers(keyword, findRole);
-        if (CollectionUtils.isEmpty(list)) {
-            responseMsg(response, new Message(false, Const.NO_USER_DATA));
+        if (!CollectionUtils.isEmpty(list)) {
+            responseMsg(response, new Message<>(new ResponseVo<>(list, counts), true, "Success"));
             return;
         }
-        responseMsg(response, new Message<>(new ResponseVo<>(list, counts), true, "Success"));
+        responseMsg(response, new Message(false, Const.NO_USER_DATA));
     }
 
     @Mark("修改密码")

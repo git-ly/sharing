@@ -1,5 +1,6 @@
 package com.mworld.resume.service;
 
+import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
 
 import java.util.List;
@@ -10,7 +11,11 @@ public interface DeptProjService {
 
     public Integer savePrj(String proName);
 
-    public Integer saveDptPrj(String dptName, String proName);
+    public Integer saveDptPo(Department dpt);
+
+    public Integer savePrjPo(Project pro);
+
+    public Integer saveDptPrj(Integer dptId, Integer proId);
 
     public List<Project> findPrjOfDpt(Integer dptId);
 
@@ -19,4 +24,10 @@ public interface DeptProjService {
     public Integer findPrjCntByName(String proName);
 
     public Integer findDptCntPrj(String dptName, String proName);
+
+    public Integer findDptIdByName(String dptName);
+
+    public Integer findProIdByName(String proName);
+
+    public Integer findDptProCnt(Integer dptId, String proId);
 }

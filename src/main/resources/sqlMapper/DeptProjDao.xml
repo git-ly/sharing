@@ -12,8 +12,16 @@
         INSERT INTO project(pro_name) VALUE(#{proName});
     </insert>
 
+    <insert id="saveDptPo" parameterType="String" useGeneratedKeys="true">
+        INSERT INTO department(dpt_name) VALUE(#{dptName});
+    </insert>
+
+    <insert id="savePrjPo" parameterType="Project" useGeneratedKeys="true">
+        INSERT INTO project(pro_name) VALUE(#{proName});
+    </insert>
+
     <insert id="saveDptPrj">
-        INSERT INTO dpt_prj_mid(dpt_name,pro_name) VALUES (#{dptName},#{proName})
+        INSERT INTO dpt_prj_mid(dpt_id,prj_id) VALUES (#{dptId},#{proId})
     </insert>
 
     <select id="findPrjOfDpt" resultType="String">
@@ -39,5 +47,16 @@
         AND p.pro_name=#{proName}
     </select>
 
+    <select id="findDptIdByName" resultType="int">
+        SELECT id from department where dpt_name=#{dptName}
+    </select>
+
+    <select id="findDptIdByName" resultType="int">
+        SELECT id from project where pro_name=#{proName}
+    </select>
+
+    <select id="findDptProCnt" resultType="int">
+        SELECT count(1) FROM dpt_prj_mid WHERE dpt_id=#{dptId} AND prj_id=#{proId}
+    </select>
 
 </mapper>
