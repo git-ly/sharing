@@ -158,8 +158,6 @@
       <artifactId>aspectjweaver</artifactId>
       <version>1.8.10</version>
     </dependency>
-
-<<<<<<< HEAD
     <!--<dependency>-->
       <!--<groupId>org.jodconverter</groupId>-->
       <!--<artifactId>jodconverter-core</artifactId>-->
@@ -172,8 +170,7 @@
     </dependency>
 
 
-=======
->>>>>>> eb5e0b476260a3f53814751105db0552a46327bc
+
   </dependencies>
   <build>
     <finalName>sharing</finalName>
