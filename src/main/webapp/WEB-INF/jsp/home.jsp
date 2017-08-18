@@ -104,7 +104,7 @@
     </div>
     <div class="logout-div">
         <a class="btn-group">
-            <button class="btn btn-primary reset-pwd-btn" type="button">重置密码</button>
+            <button class="btn btn-primary reset-pwd-btn" type="button">修改密码</button>
         </a>
         <a class="btn-group" href="<%=basePath%>logout">
             <button class="btn btn-danger" type="button">登出</button>

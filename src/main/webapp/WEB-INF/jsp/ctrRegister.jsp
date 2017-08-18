@@ -14,13 +14,27 @@
 <head>
     <title>Title</title>
     <style>
-        .add-dom .glyphicon {
-            width: 100px;
-            height: 100px;
+        .add-dom{
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .add-dom .glyphicon.glyphicon-plus {
+            width:250px;
+            height: 250px;
+            line-height: 250px;
+            text-align: center;
+            font-size: 50px;
+            border: 4px solid rgba(2, 2, 2, 0.2);
+            color: rgba(2, 2, 2, 0.2);
+            margin: 50px;
         }
     </style>
 </head>
 <body>
-<div class="add-dom"><span class="glyphicon glyphicon-plus"></span></div>
+<div class="add-dom">
+    <span class="glyphicon glyphicon-plus"></span>
+    <span class="glyphicon glyphicon-plus"></span>
+</div>
 </body>
 </html>

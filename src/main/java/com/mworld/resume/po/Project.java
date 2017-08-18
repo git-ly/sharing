@@ -19,4 +19,11 @@ public class Project {
     public void setProName(String proName) {
         this.proName = proName;
     }
+
+    public Project() {
+    }
+
+    public Project(String proName) {
+        this.proName = proName;
+    }
 }
