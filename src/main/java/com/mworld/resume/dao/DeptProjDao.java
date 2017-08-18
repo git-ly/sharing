@@ -31,4 +31,8 @@ public interface DeptProjDao {
     public Integer findProIdByName(String proName);
 
     public Integer findDptProCnt(@Param("dptId") Integer dptId, @Param("proId") String proId);
+
+    public Integer saveDptAndPros(@Param("dptId") Integer dptId, @Param("list") List<Integer> list);
+
+    public Integer saveProAndDpts(@Param("proId") Integer proId, @Param("list") List<Integer> list);
 }

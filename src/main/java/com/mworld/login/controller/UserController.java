@@ -169,4 +169,14 @@ public class UserController extends BaseController {
         responseMsg(response, new Message(true, Const.UPDATE_SUCCESS));
     }
 
+    @RequestMapping(value = "validAcct", method = RequestMethod.POST)
+    @ResponseBody
+    public void acctValid(HttpServletRequest request, HttpServletResponse response){
+        String acct = request.getParameter("account");
+        if ("bolom".equals(acct))
+            if (userService.checkUser(acct) > 0) {
+                responseMsg(response, new Message(false, Const.ACCT_CANNOT_REGISTER));
+            }
+    }
+
 }

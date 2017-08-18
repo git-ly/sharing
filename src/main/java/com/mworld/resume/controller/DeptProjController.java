@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bolom on 2017/8/14.
@@ -79,7 +81,7 @@ public class DeptProjController extends BaseController {
                 responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
                 return;
         }
-        if (saveCnt > 1) {
+        if (saveCnt > 0) {
             responseMsg(response, new Message(true, NoticeConst.DATA_SAVE_SUCCESS));
             return;
         }
@@ -87,29 +89,57 @@ public class DeptProjController extends BaseController {
     }
 
 
-    public void unionShips(HttpServletRequest request, HttpServletResponse response){
-        String proName = request.getParameter("proName");
-        String dptName = request.getParameter("dptName");
+    @RequestMapping(value = "{target}/unionShips")
+    public void unionShips(HttpServletRequest request, HttpServletResponse response, @PathVariable("target") String target) {
+        String opt = request.getParameter("opt");
+        String opts = request.getParameter("opts");
+        if (StringUtils.isEmpty(opt) || StringUtils.isEmpty(opts)) {
+            responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
+            return;
+        }
+        String[] args = opts.split(",");
+        List<Integer> list = new ArrayList<>();
+        for (String item : args) {
+            list.add(Integer.valueOf(item));
+        }
 
-        Integer dptId = deptProjService.findDptIdByName(dptName);
-        Integer proId = deptProjService.findProIdByName(proName);
-        if (dptId == null || dptId < 1) {
-            Department dpt = new Department(dptName);
-            Integer depInCnt = deptProjService.saveDptPo(dpt);
-            if (depInCnt == null || depInCnt < 1) {
-                responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+        Integer cnt = -1;
+        switch (target) {
+            case "dpt":
+                deptProjService.saveDptAndPros(Integer.valueOf(opt), list);
+                break;
+            case "prj":
+                deptProjService.saveProAndDpts(Integer.valueOf(opt), list);
+                break;
+            default:
+                responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
                 return;
-            }
-            dptId = dpt.getId();
         }
-        if (proId == null || proId < 1){
-            Project pro = new Project(proName);
-            Integer proInCnt = deptProjService.savePrjPo(pro);
-            if (proInCnt == null || proInCnt < 1){
-                responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
-                return;
-            }
-            proId = pro.getId();
+        if (cnt > 0) {
+            responseMsg(response, new Message(true, NoticeConst.DATA_SAVE_SUCCESS));
+            return;
         }
+        responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+//        Integer dptId = deptProjService.findDptIdByName(dptName);
+//        Integer proId = deptProjService.findProIdByName(proName);
+//        if (dptId == null || dptId < 1) {
+//            Department dpt = new Department(dptName);
+//            Integer depInCnt = deptProjService.saveDptPo(dpt);
+//            if (depInCnt == null || depInCnt < 1) {
+//                responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+//                return;
+//            }
+//            dptId = dpt.getId();
+//        }
+//        if (proId == null || proId < 1){
+//            Project pro = new Project(proName);
+//            Integer proInCnt = deptProjService.savePrjPo(pro);
+//            if (proInCnt == null || proInCnt < 1){
+//                responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+//                return;
+//            }
+//            proId = pro.getId();
+//        }
+
     }
 }

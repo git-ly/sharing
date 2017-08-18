@@ -28,8 +28,10 @@ jQuery(function () {
 
     // 当有文件添加进来的时候
     uploader.on('fileQueued', function (file) {
+        var fileName = file.name.length > 28 ? file.name.substr(0, 28) + '…' : file.name
         $list.append('<div id="' + file.id + '" class="item">' +
-            '<h4 class="info">' + file.name + '</h4>' +
+            '<span class="doc-icon"></span> ' +
+            '<h5 class="info" title="' + file.name + '">' + fileName + '</h5>' +
             '<p class="state">等待上传...</p>' +
             '</div>');
     });
@@ -66,7 +68,7 @@ jQuery(function () {
             },
             success: function (data) {
 
-            console.info(data);
+                console.info(data);
             },
             error: function () {
 

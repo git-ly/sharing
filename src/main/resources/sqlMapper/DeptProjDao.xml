@@ -51,12 +51,26 @@
         SELECT id from department where dpt_name=#{dptName}
     </select>
 
-    <select id="findDptIdByName" resultType="int">
+    <select id="findProIdByName" resultType="int">
         SELECT id from project where pro_name=#{proName}
     </select>
 
     <select id="findDptProCnt" resultType="int">
         SELECT count(1) FROM dpt_prj_mid WHERE dpt_id=#{dptId} AND prj_id=#{proId}
     </select>
+
+    <insert id="saveDptAndPros" parameterType="java.util.List">
+        INSERT INTO dpt_prj_mid(dpt_id,prj_id) VALUES
+        <foreach collection="list" item="pro" open="(" close=")" separator=",">
+            #{dpt_id},#{pro}
+        </foreach>
+    </insert>
+
+    <insert id="saveProAndDpts" parameterType="java.util.List">
+      INSERT INTO dpt_prj_mid(dpt_id,prj_id) VALUES
+      <foreach collection="list" item="dpt" open="(" close=")" separator=",">
+          #{dpt},#{proId}
+      </foreach>
+    </insert>
 
 </mapper>

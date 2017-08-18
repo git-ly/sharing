@@ -30,4 +30,8 @@ public interface DeptProjService {
     public Integer findProIdByName(String proName);
 
     public Integer findDptProCnt(Integer dptId, String proId);
+
+    public Integer saveDptAndPros(Integer dptId, List<Integer> list);
+
+    public Integer saveProAndDpts(Integer proId, List<Integer> list);
 }
