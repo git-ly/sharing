@@ -62,9 +62,8 @@ public class DeptProjController extends BaseController {
     @RequestMapping(value = "{option}/add", method = RequestMethod.POST)
     public void addDptPrj(HttpServletRequest request, HttpServletResponse response, @PathVariable("option") String option) {
         String saveTag = request.getParameter("saveName");
-        String proName = request.getParameter("proName");
-        String dptName = request.getParameter("dptName");
-        if (StringUtils.isEmpty(saveTag) && (StringUtils.isEmpty(dptName) || StringUtils.isEmpty(proName))) {
+
+        if (StringUtils.isEmpty(saveTag)) {
             responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
             return;
         }
@@ -76,31 +75,6 @@ public class DeptProjController extends BaseController {
             case "pro":
                 saveCnt = deptProjService.savePrj(saveTag);
                 break;
-            case "union":
-                Integer dptId = deptProjService.findDptIdByName(dptName);
-                Integer proId = deptProjService.findProIdByName(proName);
-                if (dptId == null || dptId < 1) {
-                    Department dpt = new Department(dptName);
-                    Integer depInCnt = deptProjService.saveDptPo(dpt);
-                    if (depInCnt == null || depInCnt < 1) {
-                        responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
-                        return;
-                    }
-                    dptId = dpt.getId();
-                }
-                if (proId == null || proId < 1){
-                    Project pro = new Project(proName);
-                    Integer proInCnt = deptProjService.savePrjPo(pro);
-                    if (proInCnt == null || proInCnt < 1){
-                        responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
-                        return;
-                    }
-                    proId = pro.getId();
-                }
-
-//TODO  ----------------------------------------------------------------------------------------
-
-                break;
             default:
                 responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
                 return;
@@ -110,5 +84,32 @@ public class DeptProjController extends BaseController {
             return;
         }
         responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+    }
+
+
+    public void unionShips(HttpServletRequest request, HttpServletResponse response){
+        String proName = request.getParameter("proName");
+        String dptName = request.getParameter("dptName");
+
+        Integer dptId = deptProjService.findDptIdByName(dptName);
+        Integer proId = deptProjService.findProIdByName(proName);
+        if (dptId == null || dptId < 1) {
+            Department dpt = new Department(dptName);
+            Integer depInCnt = deptProjService.saveDptPo(dpt);
+            if (depInCnt == null || depInCnt < 1) {
+                responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+                return;
+            }
+            dptId = dpt.getId();
+        }
+        if (proId == null || proId < 1){
+            Project pro = new Project(proName);
+            Integer proInCnt = deptProjService.savePrjPo(pro);
+            if (proInCnt == null || proInCnt < 1){
+                responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+                return;
+            }
+            proId = pro.getId();
+        }
     }
 }
