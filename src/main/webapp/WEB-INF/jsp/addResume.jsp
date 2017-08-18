@@ -72,18 +72,18 @@
             <h2>简历上传</h2>
         </div>
     </div>
-    <div class="form-horizontal">
+    <div id="resume-upload" class="form-horizontal">
         <div class="form-group"><label class="col-lg-3 control-label">姓名</label>
-            <div class="col-lg-5"><input type="text" class="form-control"></div>
+            <div class="col-lg-5"><input name="resumeName" type="text" class="form-control"></div>
         </div>
         <div class="form-group"><label class="col-lg-3 control-label">学历</label>
-            <div class="col-lg-5"><input type="text" class="form-control"></div>
+            <div class="col-lg-5"><input name="resumeEducation" type="text" class="form-control"></div>
         </div>
         <div class="form-group"><label class="col-lg-3 control-label">毕业时间</label>
-            <div class="col-lg-2"><input type="date" class="form-control"></div>
+            <div class="col-lg-2"><input name="resumeGraduate" type="date" class="form-control"></div>
         </div>
         <div class="form-group"><label class="col-lg-3 control-label">所属单位</label>
-            <div class="col-lg-5"><input type="" class="form-control"></div>
+            <div class="col-lg-5"><input name="resumeCompany" type="" class="form-control"></div>
         </div>
         <div class="form-group"><label class="col-lg-3 control-label">简历附件</label>
             <div class="col-lg-4"><label id="thelist" type="" class="form-control uploader-list"></label></div>

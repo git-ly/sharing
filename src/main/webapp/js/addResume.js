@@ -117,4 +117,16 @@ jQuery(function () {
     });
 });
 
+$("#resume-upload").bootstrapValidator({
+    message: 'This value not valid',
+    feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    fields: {
+
+    }
+})
+
 
