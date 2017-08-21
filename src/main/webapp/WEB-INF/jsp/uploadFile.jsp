@@ -58,5 +58,6 @@
 
 </div>
 </body>
+<script type="text/javascript" src="<%=basePath%>webuploader-0.1.5/webuploader.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/uploadFile.js"></script>
 </html>

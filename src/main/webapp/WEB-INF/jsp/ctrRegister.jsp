@@ -13,6 +13,8 @@
 <html>
 <head>
     <title>Title</title>
+    <link href="<%=path%>js/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="<%=path%>css/bootstrapValidator.min.css" rel="stylesheet" type="text/css">
     <style>
         .add-dom{
             text-align: center;
@@ -37,4 +39,9 @@
     <span class="glyphicon glyphicon-plus"></span>
 </div>
 </body>
+<script type="text/javascript" src="<%=basePath%>js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/common.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/ctrRegister.js"></script>
 </html>

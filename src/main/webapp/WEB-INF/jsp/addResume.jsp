@@ -74,7 +74,7 @@
 <section>
     <div class="col-lg-8 col-lg-offset-2">
         <div class="page-header">
-            <h2>简历上传</h2>
+            <h2>简历信息</h2>
         </div>
     </div>
     <div id="resume-upload" class="form-horizontal">
