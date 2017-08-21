@@ -84,7 +84,11 @@
         <div class="form-group"><label class="col-lg-3 control-label">学历</label>
             <div class="col-lg-5"><input name="resumeEducation" type="text" class="form-control"></div>
         </div>
-        <div class="form-group"><label class="col-lg-3 control-label">毕业时间</label>
+        <div class="form-group"><label class="col-lg-3 control-label">专业</label>
+            <div class="col-lg-2"><input name="resumeMajor" type="text" class="form-control"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">毕业时间</label>
             <div class="col-lg-2"><input name="resumeGraduate" type="date" class="form-control"></div>
         </div>
         <div class="form-group"><label class="col-lg-3 control-label">所属单位</label>
@@ -138,7 +142,7 @@
 
 <%--</div>--%>
 
-<div style="position: absolute; left: 50px; top: 10px;">
+<%--<div style="position: absolute; left: 50px; top: 10px;">
     <a id="viewerPlaceHolder" style="width: 820px; height: 650px; display: block"></a>
     <div id="documentViewer" style="width: 820px; height: 650px; display: block"></div>
     <script type="text/javascript" src="<%=basePath%>js/flexpaper_flash.js"></script>
@@ -199,12 +203,13 @@
 //
 //        localeChain : "en_US"
 //    }});
-    </script>
+    </script>--%>
 </div>
 
 </body>
 <script type="text/javascript" src="<%=basePath%>js/addResume.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash_debug.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/swfobject.js"></script>
+<script type="text/javascript" src="<%=basePath%>webuploader-0.1.5/webuploader.js"></script>
+<%--<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash.js"></script>--%>
+<%--<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash_debug.js"></script>--%>
+<%--<script type="text/javascript" src="<%=basePath%>js/swfobject.js"></script>--%>
 </html>

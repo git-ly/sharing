@@ -38,6 +38,7 @@ public class ResumeController extends BaseController {
 
     @RequestMapping(value = "uploadResume", method = {RequestMethod.POST, RequestMethod.GET})
     public void upload(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("------------------------------------------------------------");
         uploadOpt(request, RESUME_DOC_UPLOAD_PATH);
     }
 
