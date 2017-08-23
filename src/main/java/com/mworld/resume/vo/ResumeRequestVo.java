@@ -10,6 +10,7 @@ import java.util.Date;
 public class ResumeRequestVo extends Resume {
     private Date from;
     private Date to;
+    private Integer dptId;
     private String keyword;
 
     public Date getFrom() {
@@ -26,6 +27,14 @@ public class ResumeRequestVo extends Resume {
 
     public void setTo(Date to) {
         this.to = to;
+    }
+
+    public Integer getDptId() {
+        return dptId;
+    }
+
+    public void setDptId(Integer dptId) {
+        this.dptId = dptId;
     }
 
     public String getKeyword() {

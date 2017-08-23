@@ -73,4 +73,13 @@
       </foreach>
     </insert>
 
+    <select id="findDpts" resultType="Department">
+        SELECT id,dpt_name FROM department
+        <where>
+            <if test="dptName != null and dptName != ''">
+                dpt_name LIKE concat('%',concat(#{dptName}, '%'))
+            </if>
+        </where>
+    </select>
+
 </mapper>

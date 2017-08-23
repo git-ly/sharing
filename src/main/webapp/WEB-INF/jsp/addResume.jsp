@@ -14,8 +14,9 @@
 <head>
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>webuploader-0.1.5/webuploader.css">
+    <link rel="stylesheet" href="<%=basePath%>css/jquery.searchableSelect.css" type="text/css">
     <style>
-        .doc-icon{
+        .doc-icon {
             display: inline-block;
             background: url("/css/images/png/doc_72px.png") no-repeat;
             background-size: 58px 71px;
@@ -23,58 +24,28 @@
             height: 71px;
         }
 
-        .uploader-list{
+        .uploader-list {
             height: 150px;
+            z-index: -4;
+        }
+        .searchable-select{
+            z-index: 1;
         }
 
 
-        /*.resume-options div,.wu-example div {*/
-            /*margin-top: 5px;*/
-        /*}*/
-
-        /*.resume-options div span:first-child {*/
-            /*display: inline-block;*/
-            /*width: 100px;*/
-            /*font-size: 20px;*/
-        /*}*/
-        /*.resume-options div span:first-child:after {*/
-            /*content: ":";*/
-        /*}*/
-
-        /*.resume-options div input, .resume-options div select {*/
-            /*width: 180px;*/
-        /*}*/
-
-        /*.uploader-list{*/
-            /*height: 80px;*/
-            /*width: 260px;*/
-            /*!*border: 1px solid rgba(7, 11, 6, 0.11);*!*/
-        /*}*/
-        /*.btns div, .btns button{*/
-            /*display: inline-block;*/
-            /*width: 120px;*/
-            /*height: 40px;*/
-        /*}*/
-        /*.btns button{*/
-            /*margin-bottom: 32px;*/
-            /*margin-left: 15px;*/
-        /*}*/
-        /*.btns div span.glyphicon{*/
-            /*margin-right: 5px;*/
-        /*}*/
     </style>
-    <style type="text/css" media="screen">
-        #flashContent {
-            display: none;
-        }
-    </style>
+    <%--<style type="text/css" media="screen">--%>
+        <%--#flashContent {--%>
+            <%--display: none;--%>
+        <%--}--%>
+    <%--</style>--%>
 </head>
 <body>
 <%--<div>上传简历</div>--%>
 <section>
     <div class="col-lg-8 col-lg-offset-2">
         <div class="page-header">
-            <h2>简历上传</h2>
+            <h2>简历信息</h2>
         </div>
     </div>
     <div id="resume-upload" class="form-horizontal">
@@ -84,15 +55,23 @@
         <div class="form-group"><label class="col-lg-3 control-label">学历</label>
             <div class="col-lg-5"><input name="resumeEducation" type="text" class="form-control"></div>
         </div>
-        <div class="form-group"><label class="col-lg-3 control-label">毕业时间</label>
+        <div class="form-group"><label class="col-lg-3 control-label">专业</label>
+            <div class="col-lg-2"><input name="resumeMajor" type="text" class="form-control"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">毕业时间</label>
             <div class="col-lg-2"><input name="resumeGraduate" type="date" class="form-control"></div>
         </div>
         <div class="form-group"><label class="col-lg-3 control-label">所属单位</label>
-            <div class="col-lg-5"><input name="resumeCompany" type="" class="form-control"></div>
+            <div class="col-lg-5">
+                <select name="resumeDpt">
+                    <option>测试</option>
+                </select>
+                <%--<input name="resumeCompany" type="" class="form-control">--%></div>
         </div>
-        <div class="form-group"><label class="col-lg-3 control-label">简历附件</label>
+        <div class="form-group"><label class="col-lg-3 control-label" >简历附件</label>
             <div class="col-lg-4"><label id="thelist" type="" class="form-control uploader-list"></label></div>
-            <div class="col-lg-2"><span id="picker" >浏览</span></div>
+            <div class="col-lg-2"><span id="picker">浏览</span></div>
         </div>
         <div class="form-group">
             <div class="col-lg-9  col-lg-offset-4">
@@ -101,44 +80,45 @@
             </div>
         </div>
     </div>
+
 </section>
 
 <%--<div class="resume-options">--%>
-    <%--<div><span>姓名</span><input class="resume-name form-control" type="text"></div>--%>
-    <%--<div><span>学历</span><input class="resume-education form-control" type="text"></div>--%>
-    <%--<div><span>毕业时间</span><input class="resume-graduate form-control" type="date"></div>--%>
-    <%--&lt;%&ndash;<div><span>中心</span><input class="resume-center form-control" type="text"></div>&ndash;%&gt;--%>
-    <%--<div><span>中心</span>--%>
-        <%--<select name="" class="form-control">--%>
-            <%--<option value="">1</option>--%>
-            <%--<option value="">2</option>--%>
-            <%--<option value="">3</option>--%>
-            <%--<option value="">4</option>--%>
-            <%--<option value="">5</option>--%>
-        <%--</select>--%>
-    <%--</div>--%>
-    <%--<div><span>入场项目</span>--%>
-        <%--<select name="" class="form-control">--%>
-            <%--<option value="">1</option>--%>
-            <%--<option value="">2</option>--%>
-            <%--<option value="">3</option>--%>
-            <%--<option value="">4</option>--%>
-            <%--<option value="">5</option>--%>
-        <%--</select>--%>
-        <%--&lt;%&ndash;<input class="resume-project form-control" type="text">&ndash;%&gt;--%>
-    <%--</div>--%>
+<%--<div><span>姓名</span><input class="resume-name form-control" type="text"></div>--%>
+<%--<div><span>学历</span><input class="resume-education form-control" type="text"></div>--%>
+<%--<div><span>毕业时间</span><input class="resume-graduate form-control" type="date"></div>--%>
+<%--&lt;%&ndash;<div><span>中心</span><input class="resume-center form-control" type="text"></div>&ndash;%&gt;--%>
+<%--<div><span>中心</span>--%>
+<%--<select name="" class="form-control">--%>
+<%--<option value="">1</option>--%>
+<%--<option value="">2</option>--%>
+<%--<option value="">3</option>--%>
+<%--<option value="">4</option>--%>
+<%--<option value="">5</option>--%>
+<%--</select>--%>
+<%--</div>--%>
+<%--<div><span>入场项目</span>--%>
+<%--<select name="" class="form-control">--%>
+<%--<option value="">1</option>--%>
+<%--<option value="">2</option>--%>
+<%--<option value="">3</option>--%>
+<%--<option value="">4</option>--%>
+<%--<option value="">5</option>--%>
+<%--</select>--%>
+<%--&lt;%&ndash;<input class="resume-project form-control" type="text">&ndash;%&gt;--%>
+<%--</div>--%>
 <%--</div>--%>
 <%--<div id="uploader" class="wu-example">--%>
-    <%--<!--用来存放文件信息-->--%>
-    <%--<div id="thelist" class="uploader-list"></div>--%>
-    <%--<div class="btns">--%>
-        <%--<div id="picker"><span class="glyphicon glyphicon-folder-open"></span>选择简历</div>--%>
-        <%--<button id="ctlBtn" class="btn btn-default"><span class="glyphicon glyphicon-cloud-upload"></span>上传提交</button>--%>
-    <%--</div>--%>
+<%--<!--用来存放文件信息-->--%>
+<%--<div id="thelist" class="uploader-list"></div>--%>
+<%--<div class="btns">--%>
+<%--<div id="picker"><span class="glyphicon glyphicon-folder-open"></span>选择简历</div>--%>
+<%--<button id="ctlBtn" class="btn btn-default"><span class="glyphicon glyphicon-cloud-upload"></span>上传提交</button>--%>
+<%--</div>--%>
 
 <%--</div>--%>
 
-<div style="position: absolute; left: 50px; top: 10px;">
+<%--<div style="position: absolute; left: 50px; top: 10px;">
     <a id="viewerPlaceHolder" style="width: 820px; height: 650px; display: block"></a>
     <div id="documentViewer" style="width: 820px; height: 650px; display: block"></div>
     <script type="text/javascript" src="<%=basePath%>js/flexpaper_flash.js"></script>
@@ -237,12 +217,23 @@
 //
 //        localeChain : "en_US"
 //    }});
-    </script>
+    </script>--%>
 </div>
 
 </body>
+<script type="text/javascript" src="<%=basePath%>webuploader-0.1.5/webuploader.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/jquery.searchableSelect.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/addResume.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash_debug.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/swfobject.js"></script>
-</html>
+
+<%--<script>--%>
+    <%--$(function(){--%>
+        <%--$('select').searchableSelect(function () {--%>
+            <%--$("[name='resumeDpt']").append('<option>hello</option>')--%>
+        <%--});--%>
+    <%--});--%>
+<%--</script>--%>
+
+<%--<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash.js"></script>--%>
+<%--<script type="text/javascript" src="<%=basePath%>js/flexpaper_flash_debug.js"></script>--%>
+<%--<script type="text/javascript" src="<%=basePath%>js/swfobject.js"></script>--%>
+<%--</html>--%>

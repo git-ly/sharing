@@ -148,10 +148,11 @@
 <%--</div>--%>
 </body>
 <script type="text/javascript" src="<%=basePath%>js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/home.js"></script>
-<script type="text/javascript" src="<%=basePath%>webuploader-0.1.5/webuploader.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/bootstrapValidator.min.js"></script>
+
 <script>
     var host = "<%=basePath%>";
     var loginInfo = JSON.parse('${login_user}');

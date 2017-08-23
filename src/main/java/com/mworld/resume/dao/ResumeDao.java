@@ -10,7 +10,7 @@ import java.util.List;
 public interface ResumeDao {
     public List<Resume> getResumeList(@Param("options") ResumeRequestVo options, @Param("start") int start, @Param("size") int size);
 
-    public Integer addResume(Resume resume);
+    public Integer addResume(ResumeRequestVo resume);
 
     public Resume findResumeFileById(String id);
 

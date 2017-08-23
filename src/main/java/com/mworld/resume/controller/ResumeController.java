@@ -39,6 +39,7 @@ public class ResumeController extends BaseController {
 
     @RequestMapping(value = "uploadResume", method = {RequestMethod.POST, RequestMethod.GET})
     public void upload(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("------------------------------------------------------------");
         uploadOpt(request, RESUME_DOC_UPLOAD_PATH);
     }
 
@@ -51,13 +52,16 @@ public class ResumeController extends BaseController {
             String name = request.getParameter("name");
             String education = request.getParameter("education");
             String graduate = request.getParameter("graduate");
-            String project = request.getParameter("project");
+            String major = request.getParameter("major");
             String fileName = request.getParameter("fileName");
+            String dptId = request.getParameter("dptId");
 //            String destFileName = UUID.randomUUID().toString().replace("-", "") + fileName.substring(fileName.lastIndexOf("."));
             String destFileName = getDestName(fileName);
-            logger.info(graduate + fileName);
-            Resume resume = new Resume();
+            ResumeRequestVo resume = new ResumeRequestVo();
+            if (!StringUtils.isEmpty(dptId))
+                resume.setDptId(Integer.valueOf(dptId));
             resume.setOwner(name.trim());
+            resume.setMajor(major.trim());
             resume.setEducation(education.trim());
             resume.setGraduateTime(new SimpleDateFormat("yyyy-MM-dd").parse(graduate));
             resume.setUploaderId(request.getSession().getAttribute("login_userId").toString());

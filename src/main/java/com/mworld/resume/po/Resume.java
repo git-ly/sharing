@@ -9,6 +9,7 @@ public class Resume {
     private String ctrName;
     private Date graduateTime;
     private String education;
+    private String company;
     private String fileName;
     private String fileType;
     private String filePath;
@@ -110,5 +111,13 @@ public class Resume {
 
     public void setCtrName(String ctrName) {
         this.ctrName = ctrName;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

@@ -28,10 +28,10 @@ jQuery(function () {
 
     // 当有文件添加进来的时候
     uploader.on('fileQueued', function (file) {
-        var fileName = file.name.length > 28 ? file.name.substr(0, 28) + '…' : file.name
+        // var fileName = file.name.length > 28 ? file.name.substr(0, 28) + '…' : file.name
         $list.append('<div id="' + file.id + '" class="item">' +
-            '<span class="doc-icon"></span> ' +
-            '<h5 class="info" title="' + file.name + '">' + fileName + '</h5>' +
+            // '<span class="doc-icon"></span> ' +
+            '<h5 class="info" title="' + file.name + '">' + file.name + '</h5>' +
             '<p class="state">等待上传...</p>' +
             '</div>');
     });
@@ -56,16 +56,12 @@ jQuery(function () {
 
     uploader.on('uploadSuccess', function (file, response) {
         $('#' + file.id).find('p.state').text('已上传');
+        var json = fillResumeInfo();
+        json.fileName = file.name;
         $.ajax({
             url: host + "resume/storeResume",
             type: 'post',
-            data: {
-                name: $(".resume-name").val(),
-                education: $(".resume-education").val(),
-                graduate: $(".resume-graduate").val(),
-                project: $(".resume-project").val(),
-                fileName: file.name
-            },
+            data: json,
             success: function (data) {
 
                 console.info(data);
@@ -101,14 +97,19 @@ jQuery(function () {
     });
 
     $btn.on('click', function () {
-        var name = $(".resume-name").val(),
-            education = $(".resume-education").val(),
-            graduate = $(".resume-graduate").val(),
-            project = $(".resume-project").val();
-        if (!name || !education || !graduate || !project) {
-            alert("请完整填写相关信息");
-            return;
-        }
+        $("#resume-upload").bootstrapValidator('validate');
+
+        // console.info(fillResumeInfo())
+        // var name = $(".resume-name").val(),
+        //     education = $(".resume-education").val(),
+        //     graduate = $(".resume-graduate").val(),
+        //     project = $(".resume-project").val();
+        // if (!name || !education || !graduate || !project) {
+        //     alert("请完整填写相关信息");
+        //     return;
+        // }
+
+
         if (state === 'uploading') {
             uploader.stop();
         } else {
@@ -116,6 +117,16 @@ jQuery(function () {
         }
     });
 });
+
+function fillResumeInfo() {
+    return {
+        name: $("[name='resumeName']").val(),
+        education: $("[name='resumeEducation']").val(),
+        major: $("[name='resumeMajor']").val(),
+        graduate: $("[name='resumeGraduate']").val(),
+        dptId: $("select[name='resumeDpt']").val()
+    }
+}
 
 $("#resume-upload").bootstrapValidator({
     message: 'This value not valid',
@@ -125,24 +136,90 @@ $("#resume-upload").bootstrapValidator({
         validating: 'glyphicon glyphicon-refresh'
     },
     fields: {
-        resumeName:{
-            group: '.col-lg-4',
+        resumeName: {
+            group: 'col-lg-5',
             validators: {
                 notEmpty: {
-                 message:'简历人员名称不可为空'
+                    message: '简历人员姓名不可为空'
                 },
-                stringLength:{
-                    min:2,
-                    max:30,
-                    message:'姓名为2-30个字符'
+                stringLength: {
+                    min: 2,
+                    max: 30,
+                    message: '姓名为2-30字符'
                 },
-                regexp:{
-                    regexp:/^[\u4e00-\u9fa5]{2,4}$|^[a-zA-Z]{3,30}$/,
-                    message:'人员名字为2-5个中文汉字或5-30个英文字符'
+                regexp: {
+                    regexp: /^[\u4e00-\u9fa5]{2,4}$|^[a-zA-Z]{3,30}$/,
+                    message: '姓名为2-4字的中文名或3-30字符的英文名'
+                }
+            }
+        },
+        resumeEducation: {
+            group: 'col-lg-5',
+            validators: {
+                notEmpty: {
+                    message: '学历信息不可为空'
+                }
+            }
+        },
+        resumeMajor: {
+            group: 'col-lg-5',
+            validators: {
+                notEmpty: {
+                    message: '专业不可为空'
+                }
+            }
+        },
+        resumeGraduate: {
+            group: 'col-lg-5',
+            validators: {
+                notEmpty: {
+                    message: '毕业时间不可为空'
+                },
+                date: {
+                    format: 'yyyy/MM/dd',
+                    message: '时间格式不符'
+                }
+            }
+        },
+        // resumeCompany: {
+        //     group: 'col-lg-5',
+        //     validators: {
+        //         notEmpty: {
+        //             message: '公司不可为空'
+        //         }
+        //     }
+        // }
+        resumeDpt: {
+            group: 'col-lg-5',
+            validators: {
+                notEmpty: {
+                    message: '公司不可为空'
                 }
             }
         }
     }
+})
+
+$(function () {
+    $.ajax({
+        url: host + 'organize/dpt/searchList',
+        type: 'POST',
+        data: {dptName: null},
+        success: function (data) {
+            if (data) {
+                var result = JSON.parse(data).target;
+                $("select[name='resumeDpt']").html("");
+                for (var i = 0; i < result.length; i++) {
+                    $("select[name='resumeDpt']").append('<option value="' + result[i].id + '">' + result[i].dptName + '</option>')
+                }
+                $('select').searchableSelect();
+            }
+        }
+    })
+
+    $("#reset").click(function () {
+        alert($("select[name='resumeDpt']").val())
+    })
 })
 
 
