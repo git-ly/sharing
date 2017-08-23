@@ -66,7 +66,7 @@
                 <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">添加中心</h4>
             </div>
-            <div class="modal-text">
+            <div class="modal-body">
                 <div class="input-group">
                     <label for="" class="input-group-addon">元素名称</label>
                     <input type="text" class="form-control" name="checkName">
@@ -88,7 +88,7 @@
                 <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">添加新项目</h4>
             </div>
-            <div class="modal-text">
+            <div class="modal-body">
                 <div class="input-group">
                     <label for="" class="input-group-addon">元素名称</label>
                     <input type="text" class="form-control" name="checkName">

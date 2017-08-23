@@ -42,6 +42,14 @@ public class BaseController {
         }
     }
 
+    public void responseMsg(HttpServletResponse response, ValidMsg validMsg) {
+        try {
+            response.getWriter().write(JSON.toJSONString(validMsg));
+        } catch (Exception e) {
+            logger.warn("Response Error", e);
+        }
+    }
+
     public void uploadOpt(HttpServletRequest request, String dir) {
         String id = "";
         String fileName = "";

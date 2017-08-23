@@ -73,10 +73,10 @@
         <h2>登录</h2>
     </div>
     <form action="<%=basePath%>home" class="form-horizontal" method="post">
-        <div class="form-group"><label for="" class="col-lg-3 control-label">登录帐号</label>
+        <div class="form-group"><label class="col-lg-3 control-label">登录帐号</label>
             <div class="col-lg-5"><input type="text" name="acct" class="form-control"></div>
         </div>
-        <div class="form-group"><label for="" class="col-lg-3 control-label">登录密码</label>
+        <div class="form-group"><label class="col-lg-3 control-label">登录密码</label>
             <div class="col-lg-5"><input type="password" name="pwd" class="form-control"></div>
         </div>
         <div class="form-group">
@@ -108,16 +108,16 @@
         <h2>注册</h2>
     </div>
     <div class="form-horizontal">
-        <div class="form-group"><label for="" class="col-lg-3 control-label">帐号</label>
+        <div class="form-group"><label class="col-lg-3 control-label">帐号</label>
             <div class="col-lg-5"><input type="text" class="form-control" name="account"></div>
         </div>
-        <div class="form-group"><label for="" class="col-lg-3 control-label">姓名</label>
+        <div class="form-group"><label class="col-lg-3 control-label">姓名</label>
             <div class="col-lg-5"><input type="text" class="form-control" name="username"></div>
         </div>
-        <div class="form-group"><label for="" class="col-lg-3 control-label">密码</label>
+        <div class="form-group"><label class="col-lg-3 control-label">密码</label>
             <div class="col-lg-5"><input type="text" class="form-control" name="password"></div>
         </div>
-        <div class="form-group"><label for="" class="col-lg-3 control-label">确认密码</label>
+        <div class="form-group"><label class="col-lg-3 control-label">确认密码</label>
             <div class="col-lg-5"><input type="text" class="form-control" name="confirmPassword"></div>
         </div>
         <div class="form-group">
@@ -149,24 +149,31 @@
     <%--<div class="register-msg"></div>--%>
     <%--</div>--%>
 </div>
-<div class="not-btn">hello</div>
-<div class="alert" id="noticeM">&times;
-    <div  class="close" data-dismiss="alert">&times;
-        <div class="modal-content">
-            <div class="modal-title"> <strong>hello</strong></div>
-        </div>
 
+
+
+<div class="col-md-1 col-md-offset-6" id="noticeM" >
+        <div class="modal-dialog">
+                <div class="modal-content">
+                        <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h4 class="modal-title">提示</h4>
+                            </div>
+                        <div class="modal-body">
+                            </div>
+                        <div class="modal-footer">
+                                <button type="button" class="close btn btn-default">确定</button>
+                            </div>
+                    </div>
+            </div>
     </div>
-</div>
 </body>
 <script type="text/javascript" src="<%=basePath%>js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/login.js"></script>
 <script>
-    var host = '<%=basePath%>'
-    $(".not-btn").click(function () {
-        $("#noticeM").alert();
-    })
+    var host = '<%=basePath%>';
+
 </script>
 </html>

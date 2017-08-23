@@ -2,6 +2,7 @@ package com.mworld.login.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mworld.common.BaseController;
+import com.mworld.common.ValidMsg;
 import com.mworld.common.annotation.Mark;
 import com.mworld.common.exception.NotLoginException;
 import com.mworld.login.po.User;
@@ -176,8 +177,11 @@ public class UserController extends BaseController {
         String acct = request.getParameter("account");
         if ("bolom".equals(acct))
             if (userService.checkUser(acct) > 0) {
-                responseMsg(response, new Message(false, Const.ACCT_CANNOT_REGISTER));
+//                responseMsg(response, new Message(false, Const.ACCT_CANNOT_REGISTER));
+                responseMsg(response, new ValidMsg(false));
+                return;
             }
+        responseMsg(response, new ValidMsg(true));
     }
 
 }

@@ -3,6 +3,20 @@
  */
 
 $(function () {
+    $("#noticeM").hide();
+    $("#noticeM span.close,#noticeM button").unbind().bind("click",function () {
+        $("#noticeM").hide();
+    })
+    function showBox(init) {
+        if (init){
+            if (init.title)
+                $("#noticeM").find(".modal-title").html(init.title)
+            if (init.content)
+                $("#noticeM").find(".modal-body").html(init.content)
+        }
+        $("#noticeM").show(200);
+    }
+
     $(".register-contain").hide();
     $("[name='goSignUp']").click(function () {
         $(".login-contain").slideUp(1000);
@@ -112,10 +126,15 @@ $(function () {
             data: fillData(),
             success : function (data) {
                 var result = JSON.parse(data)
+                console.info("result---->" + result.msg)
                 if (result.success){
-                    $(".register-msg").addClass("text-success").text(result.msg);
+                    showBox({
+                        content: result.msg
+                    })
                 } else {
-                    $(".register-msg").addClass("text-danger").text(result.msg);
+                    showBox({
+                        content: result.msg
+                    })
                 }
                 console.info(data)
             },

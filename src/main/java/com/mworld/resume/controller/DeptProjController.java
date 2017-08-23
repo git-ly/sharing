@@ -3,6 +3,7 @@ package com.mworld.resume.controller;
 import com.mworld.common.BaseController;
 import com.mworld.common.Message;
 import com.mworld.common.NoticeConst;
+import com.mworld.common.ValidMsg;
 import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
 import com.mworld.resume.service.DeptProjService;
@@ -45,7 +46,7 @@ public class DeptProjController extends BaseController {
     public void checkExists(HttpServletRequest request, HttpServletResponse response, @PathVariable("option") String option) {
         String checkName = request.getParameter("checkName");
         if (StringUtils.isEmpty(checkName)) {
-            responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
+            responseMsg(response, new ValidMsg(false));
             return;
         }
         int cnt = -1;
@@ -57,15 +58,15 @@ public class DeptProjController extends BaseController {
                 cnt = deptProjService.findPrjCntByName(checkName);
                 break;
             default:
-                responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
+                responseMsg(response, new ValidMsg(false));
                 return;
         }
 
         if (cnt > 0) {
-            responseMsg(response, new Message(false, NoticeConst.REPEAT_DATA));
+            responseMsg(response, new ValidMsg(false));
             return;
         }
-        responseMsg(response, new Message(true, NoticeConst.CAN_BE_USE));
+        responseMsg(response, new ValidMsg(true));
     }
 
     @RequestMapping(value = "{option}/add", method = RequestMethod.POST)

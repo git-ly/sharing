@@ -6,7 +6,7 @@ var tip = {
             '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
             '<h4 class="modal-title" id="myModalLabel">Notice</h4>' +
             '</div>' +
-            '<div class="modal-text">text</div>' +
+            '<div class="modal-body">text</div>' +
             '<div class="modal-footer">' +
             '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>' +
             '<button type="button" class="btn btn-primary" id="sure-btn">提交更改</button>' +
@@ -21,7 +21,7 @@ var tip = {
         if (info.title)
             $("#noticeModal .modal-title").html(info.title);
         if (info.text)
-            $("#noticeModal .modal-text").html(info.text);
+            $("#noticeModal .modal-body").html(info.text);
         if (info.closeBtnName)
             $("#noticeModal .close-btn").text(info.closeBtnName);
         if (info.closeBtnHide)
