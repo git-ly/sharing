@@ -10,6 +10,7 @@ import com.mworld.common.Message;
 import com.mworld.common.ResponseVo;
 import com.mworld.resume.vo.ResumeMapVo;
 import com.mworld.resume.vo.ResumeRequestVo;
+import com.mworld.util.DocConverter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +148,26 @@ public class ResumeController extends BaseController {
                 download(response, file, downName);
             }
         }
+    }
+
+    //    @RequestMapping(value = "{id}/previewDoc", method = RequestMethod.GET)
+//    public void previewDoc(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id){
+//        if (!StringUtils.isEmpty(id)) {
+//            Resume resume = resumeService.findResume(id.trim());
+//            if (!Objects.isNull(resume)) {
+//
+//            }
+//        }
+//    }
+    @RequestMapping(value = "/previewDoc", method = RequestMethod.GET)
+    public void previewDoc(HttpServletRequest request, HttpServletResponse response) {
+        String output = this.getClass().getClassLoader().getResource("/").getPath().replace("WEB-INF/classes/","js/swf");
+        logger.info(output + "-------------------");
+        DocConverter docConverter = new DocConverter("D:/test2.doc");
+        docConverter.setOutPath(output);
+        docConverter.convert();
+        if (docConverter.convert())
+            responseMsg(response, new Message<>(true, "js/swf/test2.swf"));
     }
 
 

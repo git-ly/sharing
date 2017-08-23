@@ -18,7 +18,16 @@
 <head>
     <title>home</title>
     <link href="<%=path%>js/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="<%=path%>css/bootstrapValidator.min.css" rel="stylesheet" type="text/css">
     <style>
+        .loading{
+            display: inline-block;
+            background: url("/css/images/gif/loding.gif");
+            background-size: 89px 90px;
+            width: 89px;
+            height: 90px;
+        }
+
         .log_head {
             height: 80px;
             width: 100%;
@@ -139,6 +148,7 @@
 <%--</div>--%>
 </body>
 <script type="text/javascript" src="<%=basePath%>js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/home.js"></script>
 <script type="text/javascript" src="<%=basePath%>webuploader-0.1.5/webuploader.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>

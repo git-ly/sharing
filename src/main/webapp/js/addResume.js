@@ -125,7 +125,23 @@ $("#resume-upload").bootstrapValidator({
         validating: 'glyphicon glyphicon-refresh'
     },
     fields: {
-
+        resumeName:{
+            group: '.col-lg-4',
+            validators: {
+                notEmpty: {
+                 message:'简历人员名称不可为空'
+                },
+                stringLength:{
+                    min:2,
+                    max:30,
+                    message:'姓名为2-30个字符'
+                },
+                regexp:{
+                    regexp:/^[\u4e00-\u9fa5]{2,4}$|^[a-zA-Z]{3,30}$/,
+                    message:'人员名字为2-5个中文汉字或5-30个英文字符'
+                }
+            }
+        }
     }
 })
 

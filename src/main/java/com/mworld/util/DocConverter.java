@@ -1,200 +1,154 @@
 package com.mworld.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import com.artofsolving.jodconverter.DocumentConverter;
 import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
+import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeException;
 import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+
+import java.io.*;
+import java.net.ConnectException;
 
 public class DocConverter {
-    private static final int environment = 1;// 环境1：windows,2:linux(涉及pdf2swf路径问题)
-    private String fileString;
-    private String outputPath = "";// 输入路径，如果不设置就输出在默认位置
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final int environment = 1;//1->windows,2->linux
+    private static final int DEFAULT_PORT = 8100;
+    private static final String DEFAULT_SWFTOOLPATH = "D:/SWFTools/";
+    private int port;
+    private String swfToolsPath;
+    private String docPath;
+    private String outPath;
     private String fileName;
+    private File docFile;
     private File pdfFile;
     private File swfFile;
-    private File docFile;
 
-    public DocConverter(String fileString) {
-        ini(fileString);
+    public DocConverter(String docPath) {
+        init(docPath);
     }
 
-    /*
-     * 重新设置 file @param fileString
-     */
-    public void setFile(String fileString) {
-        ini(fileString);
-    }
-
-    /*
-     * 初始化 @param fileString
-     */
-    private void ini(String fileString) {
-        this.fileString = fileString;
-        fileName = fileString.substring(0, fileString.lastIndexOf("."));
-        docFile = new File(fileString);
+    public void init(String docPath) {
+        this.docPath = docPath;
+        port = DEFAULT_PORT;
+        swfToolsPath = DEFAULT_SWFTOOLPATH;
+        fileName = docPath.replaceAll("\\\\", "/").substring(docPath.lastIndexOf("/"), docPath.lastIndexOf("."));
+        docFile = new File(docPath);
         pdfFile = new File(fileName + ".pdf");
         swfFile = new File(fileName + ".swf");
     }
 
-    /*
-     * 转为PDF @param file
+    public void setDocPath(String docPath) {
+        this.docPath = docPath;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    /**
+     *
+     * @param swfToolsPath SWFTOOLS工具的安装目录
      */
-    private void doc2pdf() throws Exception {
+    public void setSwfToolsPath(String swfToolsPath) {
+        this.swfToolsPath = swfToolsPath;
+    }
+
+    private void docToPdf() throws Exception {
         if (docFile.exists()) {
             if (!pdfFile.exists()) {
-                OpenOfficeConnection connection = new SocketOpenOfficeConnection(8100);
+                OpenOfficeConnection connection = new SocketOpenOfficeConnection(port);
+
                 try {
                     connection.connect();
                     DocumentConverter converter = new OpenOfficeDocumentConverter(connection);
                     converter.convert(docFile, pdfFile);
-                    // close the connection
                     connection.disconnect();
-                    System.out.println("****pdf转换成功，PDF输出：" + pdfFile.getPath() + "****");
-                } catch (java.net.ConnectException e) {
-                    // ToDo Auto-generated catch block
-                    e.printStackTrace();
-                    System.out.println("****swf转换异常，openoffice服务未启动！****");
+                    logger.info(docFile.getName() + "成功转换成" + pdfFile.getPath());
+                } catch (ConnectException e) {
+                    logger.error("OpenOffice 服务未启动", e);
                     throw e;
-                } catch (com.artofsolving.jodconverter.openoffice.connection.OpenOfficeException e) {
-                    e.printStackTrace();
-                    System.out.println("****swf转换器异常，读取转换文件失败****");
-                    throw e;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (OpenOfficeException e) {
+                    logger.error("pdf转换异常，读取转换文件失败", e);
                     throw e;
                 }
             } else {
-                System.out.println("****已经转换为pdf，不需要再进行转化****");
+                logger.info(pdfFile.getName() + "已经存在，无需再次转换");
             }
         } else {
-            System.out.println("****swf转换器异常，需要转换的文档不存在，无法转换****");
+            logger.info("doc文件不存在");
         }
     }
 
-    /*
-     * 转换成swf
-     */
-    private void pdf2swf() throws Exception {
+    private void pdfToSwf() {
         Runtime r = Runtime.getRuntime();
-        if (!swfFile.exists()) {
-            if (pdfFile.exists()) {
-                if (environment == 1)// windows环境处理
-                {
-                    try {
-                        // 这里根据SWFTools安装路径需要进行相应更改
-                        Process p = r.exec("d:/SWFTools/pdf2swf.exe " + pdfFile.getPath() + " -o " + swfFile.getPath() + " -T 9");
-                        System.out.print(loadStream(p.getInputStream()));
-                        System.err.print(loadStream(p.getErrorStream()));
-                        System.out.print(loadStream(p.getInputStream()));
-                        System.err.println("****swf转换成功，文件输出：" + swfFile.getPath() + "****");
-                        if (pdfFile.exists()) {
-                            pdfFile.delete();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
-                } else if (environment == 2)// linux环境处理
-                {
-                    try {
-                        Process p = r.exec("pdf2swf " + pdfFile.getPath() + " -o " + swfFile.getPath() + " -T 9");
-                        System.out.print(loadStream(p.getInputStream()));
-                        System.err.print(loadStream(p.getErrorStream()));
-                        System.err.println("****swf转换成功，文件输出：" + swfFile.getPath() + "****");
-                        if (pdfFile.exists()) {
-                            pdfFile.delete();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
-                }
-            } else {
-                System.out.println("****pdf不存在，无法转换****");
+        if (pdfFile.exists()) {
+            String command = "";
+            if (environment == 1) {
+                if (swfToolsPath.charAt(swfToolsPath.length() - 1) == '/')
+                    command = swfToolsPath + "pdf2swf.exe ";
+                else
+                    command = swfToolsPath + "/pdf2swf.exe ";
             }
-        } else {
-            System.out.println("****swf已存在不需要转换****");
+            if (environment == 2)
+                command = "pdf2swf ";
+            try {
+                Process process = r.exec(command + pdfFile.getPath() + " -o" + swfFile.getPath() + " -T 9");
+                logger.info(loadStream(process.getInputStream()));
+                logger.info(loadStream(process.getErrorStream()));
+                logger.info("swf文件转换成功");
+                if (pdfFile.exists())
+                    pdfFile.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    static String loadStream(InputStream in) throws IOException {
+    private String loadStream(InputStream is) throws IOException {
         int ptr = 0;
-        //把InputStream字节流 替换为BufferedReader字符流 2013-07-17修改
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        StringBuilder buffer = new StringBuilder();
-        while ((ptr = reader.read()) != -1) {
-            buffer.append((char) ptr);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        while ((ptr = br.read()) != -1) {
+            sb.append((char) ptr);
         }
-        return buffer.toString();
+        return sb.toString();
     }
 
-    /*
-     * 转换主方法
-     */
-    public boolean conver() {
+    public String getSwfPath() {
         if (swfFile.exists()) {
-            System.out.println("****swf转换器开始工作，该文件已经转换为swf****");
+            return swfFile.getPath().replaceAll("\\\\", "/");
+        }
+        return null;
+    }
+
+    public void setOutPath(String outPath) {
+        this.outPath = outPath;
+        if (!StringUtils.isEmpty(outPath)) {
+            if (outPath.charAt(outPath.length() - 1) == '/')
+                swfFile = new File(outPath + fileName + ".swf");
+            else
+                swfFile = new File(outPath + "/" + fileName + ".swf");
+        }
+    }
+
+    public boolean convert() {
+        if (swfFile.exists()) {
+            logger.info(swfFile.getName() + "已存在");
             return true;
         }
-
-        if (environment == 1) {
-            System.out.println("****swf转换器开始工作，当前设置运行环境windows****");
-        } else {
-            System.out.println("****swf转换器开始工作，当前设置运行环境linux****");
-        }
-
         try {
-            doc2pdf();
-            pdf2swf();
+            docToPdf();
+            pdfToSwf();
         } catch (Exception e) {
-            // TODO: Auto-generated catch block
             e.printStackTrace();
-            return false;
         }
-
         if (swfFile.exists()) {
+            logger.info(docFile.getName() + "已转换为" + swfFile.getName());
             return true;
-        } else {
-            return false;
         }
-    }
-
-    /*
-     * 返回文件路径 @param s
-     */
-    public String getswfPath() {
-        if (swfFile.exists()) {
-            String tempString = swfFile.getPath();
-            tempString = tempString.replaceAll("\\\\", "/");
-            return tempString;
-        } else {
-            return "";
-        }
-    }
-
-    /*
-     * 设置输出路径
-     */
-    public void setOutputPath(String outputPath) {
-        this.outputPath = outputPath;
-        if (!outputPath.equals("")) {
-            String realName = fileName.substring(fileName.lastIndexOf("/"), fileName.lastIndexOf("."));
-            if (outputPath.charAt(outputPath.length()) == '/') {
-                swfFile = new File(outputPath + realName + ".swf");
-            } else {
-                swfFile = new File(outputPath + realName + ".swf");
-            }
-        }
-    }
-
-    public static void main(String s[]) {
-        DocConverter d = new DocConverter("D:/test.doc");
-        d.conver();
+        return false;
     }
 }

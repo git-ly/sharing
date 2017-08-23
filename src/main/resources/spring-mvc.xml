@@ -8,7 +8,7 @@
 
 
 
-    <!--<mvc:resources mapping="/images/" location="images/**"/>-->
+    <!--<mvc:resources mapping="/images/**" location="images/"/>-->
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -28,12 +28,11 @@
         <mvc:mapping path="/**"/>
         <mvc:exclude-mapping path="/login"/>
         <mvc:exclude-mapping path="/home"/>
-        <mvc:exclude-mapping path="/logout"/>
+        <!--<mvc:exclude-mapping path="/logout"/>-->
         <mvc:exclude-mapping path="/register"/>
-        <mvc:exclude-mapping path="/doRegister"/>
         <mvc:exclude-mapping path="/validAcct"/>
-        <mvc:exclude-mapping path="/resume/*"/>
-        <mvc:exclude-mapping path="/*/view"/>
+        <!--<mvc:exclude-mapping path="/resume/*"/>-->
+        <!--<mvc:exclude-mapping path="/*/view"/>-->
         <mvc:exclude-mapping path="/css/**"/>
         <mvc:exclude-mapping path="/bootstrap-3.3.5-dist/**"/>
         <mvc:exclude-mapping path="/js/**"/>

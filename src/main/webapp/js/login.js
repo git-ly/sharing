@@ -52,12 +52,12 @@ $(function () {
                     },
                     stringLength: {
                         min: 2,
-                        max: 5,
-                        message: '帐号为2-5个汉字'
+                        max: 20,
+                        message: '姓名为2-30个字符'
                     },
                     regexp: {
-                        regexp: /^[\u4e00-\u9fa5]+$/,
-                        message: '请使用真实中文名'
+                        regexp: /^[\u4e00-\u9fa5]{2,4}$|^[a-zA-Z]{3,30}$/,
+                        message: '用户名为2-4个中文汉字或3-30个英文字符'
                     }
                 }
             },

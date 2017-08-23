@@ -57,18 +57,18 @@ $(function () {
 
     var roleNum = parseInt(loginInfo.role);
     if (roleNum == 1) {
-        $(".main-contain").html("正在努力加载中…………").load(host + "authorization/view");
+        $(".main-contain").html('<span class="loading"></span>').load(host + "authorization/view");
         // $("[menuUrl='addAdmin']").addClass("active");
     } else if (roleNum == 2) {
-        $(".main-contain").html("正在努力加载中…………").load(host + "resumeList/view");
+        $(".main-contain").html('<span class="loading"></span>').load(host + "resumeList/view");
     } else if (roleNum == 3) {
-        $(".main-contain").html("正在努力加载中…………").load(host + "sourceList/view")
+        $(".main-contain").html('<span class="loading"></span>').load(host + "sourceList/view")
     }
 
     $(".menu-list-item").click(function () {
         var url = $(this).attr("menuUrl");
         if (url)
-            $(".main-contain").html("正在努力加载中…………").load(host + url + "/view");
+            $(".main-contain").html('<span class="loading"></span>').load(host + url + "/view");
     })
 
 
