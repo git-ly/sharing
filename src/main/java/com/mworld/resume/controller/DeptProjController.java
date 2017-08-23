@@ -28,9 +28,16 @@ public class DeptProjController extends BaseController {
     @Autowired
     private DeptProjService deptProjService;
 
-    @RequestMapping(value = "{option}/searchList")
+    @RequestMapping(value = "{option}/searchList", method = RequestMethod.POST)
     public void getSearchList(HttpServletRequest request, HttpServletResponse response, @PathVariable("option") String option) {
-
+        switch (option){
+            case "dpt":
+                String dptName = request.getParameter("dptName");
+                List<Department> dpts = deptProjService.findDpts(dptName);
+                response.setContentType("text/html;charset=UTF-8");
+                responseMsg(response,new Message<>(dpts,true,NoticeConst.GET_DATA_NOTICE));
+                break;
+        }
 
     }
 

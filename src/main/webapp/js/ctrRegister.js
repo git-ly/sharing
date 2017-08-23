@@ -1,62 +1,90 @@
+var ctrFc = {
+    initMsgBox: function (init) {
+        $("#alertModal .help-block").text('');
+        $("#alertModal [name='checkName']").val('');
+        if (init){
+            if (init.title)
+                $("#alertModal .modal-title").html(init.title);
+            if (init.text)
+                $("#alertModal .modal-text").html(init.text);
+            if (init.notice)
+                $("#alertModal .help-block").html(init.notice);
+        }
+    }
+}
+
 $(function () {
     $(".add-dom span:eq(0)").unbind().bind("click", function () {
-        $("#notice-contain").html(tip.modalTem);
-        tip.fillMsgBox({
-            title: '提示:添加新中心',
-            text: '<div id="newCtr" class="input-group"><span class="input-group-addon">中心名称</span><input type="text" name="checkName" class="form-control"/> </div>',
-            sureBtnName: '确定'
-
-        });
-        $("#noticeModal").modal();
-
-        $("#sure-btn").unbind().bind("click", function () {
-            $("#newCtr").bootstrapValidator('validate');
+        $("#alertModal").modal();
+        var used = false;
+        $("[name='checkName']").unbind().bind("blur change",function () {
+            $("#alertModal .help-block").text('');
             $.ajax({
-                url: host + 'organize/dpt/add',
+                url: host + 'organize/dpt/checkExist',
+                async: false,
                 type: 'POST',
-                data: {saveName: $("#newCtr [name='checkName']").val()},
+                data: {checkName: $("#alertModal [name='checkName']").val()},
                 success: function (data) {
-                    if (data && data.success == true){
+                    var result = JSON.parse(data);
+                    $("#alertModal .help-block").text(result.msg);
+                    if (result.success){
+                        $("#alertModal .commit-btn").unbind().bind("click", function () {
+                            // $("#newCtr").bootstrapValidator('validate');
+                            $.ajax({
+                                url: host + 'organize/dpt/add',
+                                type: 'POST',
+                                data: {saveName: $("#alertModal [name='checkName']").val()},
+                                success: function (data) {
+                                    if (data && data.success == true) {
 
-                        tip.fillMsgBox({
-                            title: '提示:添加新中心',
-                            text: '中心添加成功',
-                            sureBtnName: '确定'
-
-                        });
-                        $("#sure-btn").modal('hide');
+                                        setTimeout(function () {
+                                            $("#alertModal").modal('hide');
+                                        },1000)
+                                    }
+                                }
+                            })
+                        })
                     }
                 }
             })
         })
-
-
-
     })
 
 
-    $("#newCtr").bootstrapValidator({
-        message: 'This value not valid',
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            checkName: {
-                group: 'col-lg-5',
-                validators: {
-                    notEmpty: {
-                        message: '项目名不可为空'
-                    },
-                    remote: {
-                        type: 'POST',
-                        url: host + 'organize/dpt/checkExist',
-                        message: '该中心已添加'
+    $(".add-dom span:eq(1)").unbind().bind("click", function () {
+        $("#alertModal").modal();
+        var used = false;
+        $("[name='checkName']").change(function () {
+            $("#alertModal .help-block").text('');
+            $.ajax({
+                url: host + 'organize/pro/checkExist',
+                async: false,
+                type: 'POST',
+                data: {checkName: $("#alertModal [name='checkName']").val()},
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    $("#alertModal .help-block").text(result.msg);
+                    if (result.success){
+                        $("#alertModal .commit-btn").unbind().bind("click", function () {
+                            // $("#newCtr").bootstrapValidator('validate');
+                            $.ajax({
+                                url: host + 'organize/pro/add',
+                                type: 'POST',
+                                data: {saveName: $("#alertModal [name='checkName']").val()},
+                                success: function (data) {
+                                    if (data && data.success == true) {
+
+                                        setTimeout(function () {
+                                            $("#alertModal").modal('hide');
+                                        },1000)
+                                    }
+                                }
+                            })
+                        })
                     }
                 }
-            }
-        }
+            })
+        })
     })
 
 })

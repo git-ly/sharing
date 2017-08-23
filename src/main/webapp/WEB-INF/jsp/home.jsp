@@ -144,6 +144,7 @@
 <script type="text/javascript" src="<%=basePath%>js/home.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/bootstrapValidator.min.js"></script>
+
 <script>
     var host = "<%=basePath%>";
     var loginInfo = JSON.parse('${login_user}');

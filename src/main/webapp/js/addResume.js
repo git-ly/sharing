@@ -124,7 +124,7 @@ function fillResumeInfo() {
         education: $("[name='resumeEducation']").val(),
         major: $("[name='resumeMajor']").val(),
         graduate: $("[name='resumeGraduate']").val(),
-        company: $("[name='resumeCompany']").val(),
+        dptId: $("select[name='resumeDpt']").val()
     }
 }
 
@@ -139,7 +139,7 @@ $("#resume-upload").bootstrapValidator({
         resumeName: {
             group: 'col-lg-5',
             validators: {
-                notEmpty:{
+                notEmpty: {
                     message: '简历人员姓名不可为空'
                 },
                 stringLength: {
@@ -156,7 +156,7 @@ $("#resume-upload").bootstrapValidator({
         resumeEducation: {
             group: 'col-lg-5',
             validators: {
-                notEmpty:{
+                notEmpty: {
                     message: '学历信息不可为空'
                 }
             }
@@ -181,7 +181,15 @@ $("#resume-upload").bootstrapValidator({
                 }
             }
         },
-        resumeCompany:{
+        // resumeCompany: {
+        //     group: 'col-lg-5',
+        //     validators: {
+        //         notEmpty: {
+        //             message: '公司不可为空'
+        //         }
+        //     }
+        // }
+        resumeDpt: {
             group: 'col-lg-5',
             validators: {
                 notEmpty: {
@@ -190,6 +198,28 @@ $("#resume-upload").bootstrapValidator({
             }
         }
     }
+})
+
+$(function () {
+    $.ajax({
+        url: host + 'organize/dpt/searchList',
+        type: 'POST',
+        data: {dptName: null},
+        success: function (data) {
+            if (data) {
+                var result = JSON.parse(data).target;
+                $("select[name='resumeDpt']").html("");
+                for (var i = 0; i < result.length; i++) {
+                    $("select[name='resumeDpt']").append('<option value="' + result[i].id + '">' + result[i].dptName + '</option>')
+                }
+                $('select').searchableSelect();
+            }
+        }
+    })
+
+    $("#reset").click(function () {
+        alert($("select[name='resumeDpt']").val())
+    })
 })
 
 

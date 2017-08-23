@@ -13,7 +13,7 @@ public interface ResumeService {
 
     public List<Resume> getResumes(ResumeRequestVo resume, Integer start, Integer size);
 
-    public Integer addResume(Resume resumes);
+    public Integer addResume(ResumeRequestVo resumes);
 
     public Resume findResume(String id);
 

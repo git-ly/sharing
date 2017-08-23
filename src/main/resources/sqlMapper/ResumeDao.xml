@@ -8,7 +8,6 @@
         SELECT
         id,
         owner,
-        company,
         education,
         graduate_time `graduateTime`,
         file_name `fileName`,
@@ -83,12 +82,12 @@
         WHERE id=#{id}
     </select>
 
-    <insert id="addResume" parameterType="Resume" useGeneratedKeys="true">
+    <insert id="addResume" parameterType="com.mworld.resume.vo.ResumeRequestVo" useGeneratedKeys="true">
         <selectKey keyProperty="id" resultType="String" order="BEFORE">
             SELECT replace(uuid(), '-', '') FROM dual;
         </selectKey>
         INSERT INTO resume(
-        id,owner,education,major,graduate_time,company,file_name,file_type,file_path,dest_name,uploader_id,upload_time
+        id,owner,education,major,graduate_time,dpt_id,file_name,file_type,file_path,dest_name,uploader_id,upload_time
         )
         VALUES
         <!--<foreach collection="list" item="item" open="(" close=")" separator=",">-->
@@ -99,7 +98,7 @@
         #{education, jdbcType=VARCHAR},
         #{major, jdbcType=VARCHAR},
         #{graduateTime, jdbcType=DATE},
-        #{company, jdbcType=VARCHAR},
+        #{dptId},
         #{fileName, jdbcType=VARCHAR},
         #{fileType, jdbcType=VARCHAR},
         #{filePath, jdbcType=VARCHAR},
@@ -114,7 +113,6 @@
         r.id,
         r.owner,
         r.major,
-        r.company,
         r.education,
         r.file_name `fileName`,
         r.file_type `fileType`,

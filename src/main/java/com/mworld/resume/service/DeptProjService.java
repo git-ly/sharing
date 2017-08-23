@@ -34,4 +34,6 @@ public interface DeptProjService {
     public Integer saveDptAndPros(Integer dptId, List<Integer> list);
 
     public Integer saveProAndDpts(Integer proId, List<Integer> list);
+
+    public List<Department> findDpts(String dptName);
 }

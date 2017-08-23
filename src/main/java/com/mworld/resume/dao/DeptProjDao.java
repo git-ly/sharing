@@ -35,4 +35,6 @@ public interface DeptProjDao {
     public Integer saveDptAndPros(@Param("dptId") Integer dptId, @Param("list") List<Integer> list);
 
     public Integer saveProAndDpts(@Param("proId") Integer proId, @Param("list") List<Integer> list);
+
+    public List<Department> findDpts(@Param("dptName") String dptName);
 }

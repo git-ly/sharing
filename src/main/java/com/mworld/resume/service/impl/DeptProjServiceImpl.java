@@ -97,4 +97,10 @@ public class DeptProjServiceImpl implements DeptProjService {
     public Integer saveProAndDpts(Integer proId, List<Integer> list) {
         return deptProjDao.saveProAndDpts(proId, list);
     }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<Department> findDpts(String dptName) {
+        return deptProjDao.findDpts(dptName);
+    }
 }

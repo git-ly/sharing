@@ -31,7 +31,7 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer addResume(Resume resume) {
+    public Integer addResume(ResumeRequestVo resume) {
         return resumeDao.addResume(resume);
     }
 
