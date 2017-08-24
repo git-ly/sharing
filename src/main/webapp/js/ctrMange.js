@@ -104,9 +104,6 @@ function findWorker(ctrId, proId) {
                         '            <span class="roadmap-title">' + result.target[i].owner + '</span>\n' +
                         '        </div>')
                 }
-                $("#worker-center .roadmap-item").click(function () {
-                    alert($(this).attr("resumeId"))
-                })
             } else {
                 $("#worker-center .panel-body").text("未查询到数据");
             }
