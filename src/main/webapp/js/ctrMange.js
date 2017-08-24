@@ -1,9 +1,18 @@
 // var pageCtrId = null;
 
 $(function () {
-    var ctrTmp = $('<div class="ctr-item">\n' +
-        '            <span class="ctr-ico"></span>\n' +
-        '            <span class="ctr-title">深圳开发中心</span>\n' +
+    $("#search").hide();
+    $("#ctr-center .glyphicon-search,#pro-center .glyphicon-search,#worker-center .glyphicon-search").unbind().bind("click", function () {
+        $("#search").show(500);
+
+    })
+    $(document).keydown(function (e) {
+        if (e.keyCode == 27)
+            $("#search").hide(500);
+    })
+    var ctrTmp = $('<div class="roadmap-item">\n' +
+        '            <span class="roadmap-ico"></span>\n' +
+        '            <span class="roadmap-title">深圳开发中心</span>\n' +
         '        </div>');
 
     $.ajax({
@@ -20,13 +29,14 @@ $(function () {
             if (result.success) {
                 for (var i = 0; i < result.target.length; i++) {
                     // var clone = ctrTmp.clone(true);
-                    // $(".ctr-item", clone).attr("ctrId", result.target[i].id).attr("onclick", "ale()");
-                    // $(".ctr-title", clone).text(result.target[i].dptName);
+                    // $(".roadmap-item", clone).attr("ctrId", result.target[i].id).attr("onclick", "ale()");
+                    // $(".roadmap-title", clone).text(result.target[i].dptName);
                     // // $("#ctr-center .panel-body").append(clone);
                     // clone.appendTo($("#ctr-center .panel-body"));
-                    $("#ctr-center .panel-body").append('<div class="ctr-item" onclick="findPrt(' + result.target[i].id + ')">\n' +
-                        '            <span class="ctr-ico"></span>\n' +
-                        '            <span class="ctr-title">' + result.target[i].dptName + '</span>\n' +
+                    $("#ctr-center .panel-body").append('<div class="roadmap-item" onclick="findPrt(' + result.target[i].id + ')">\n' +
+                        '            <span class="roadmap-ico"></span>\n' +
+                        // '            <span class="glyphicon glyphicon-minus pull-right"></span>\n' +
+                        '            <span class="roadmap-title">' + result.target[i].dptName + '</span>\n' +
                         '        </div>')
                 }
             } else {
@@ -34,6 +44,8 @@ $(function () {
             }
         }
     })
+
+
 })
 
 function findPrt(id) {
@@ -51,13 +63,13 @@ function findPrt(id) {
             if (result.success) {
                 for (var i = 0; i < result.target.length; i++) {
                     // var clone = ctrTmp.clone(true);
-                    // $(".ctr-item", clone).attr("ctrId", result.target[i].id).attr("onclick", "ale()");
-                    // $(".ctr-title", clone).text(result.target[i].dptName);
+                    // $(".roadmap-item", clone).attr("ctrId", result.target[i].id).attr("onclick", "ale()");
+                    // $(".roadmap-title", clone).text(result.target[i].dptName);
                     // // $("#ctr-center .panel-body").append(clone);
                     // clone.appendTo($("#ctr-center .panel-body"));
-                    $("#pro-center .panel-body").append('<div class="pro-item" pCtrId="' + id + '" onclick="findWorker(' + id + ',' + result.target[i].id + ')">\n' +
-                        '            <span class="pro-ico"></span>\n' +
-                        '            <span class="pro-title">' + result.target[i].proName + '</span>\n' +
+                    $("#pro-center .panel-body").append('<div class="roadmap-item" pCtrId="' + id + '" onclick="findWorker(' + id + ',' + result.target[i].id + ')">\n' +
+                        '            <span class="roadmap-ico"></span>\n' +
+                        '            <span class="roadmap-title">' + result.target[i].proName + '</span>\n' +
                         '        </div>')
                 }
             } else {
@@ -83,15 +95,18 @@ function findWorker(ctrId, proId) {
             if (result.success) {
                 for (var i = 0; i < result.target.length; i++) {
                     // var clone = ctrTmp.clone(true);
-                    // $(".ctr-item", clone).attr("ctrId", result.target[i].id).attr("onclick", "ale()");
-                    // $(".ctr-title", clone).text(result.target[i].dptName);
+                    // $(".roadmap-item", clone).attr("ctrId", result.target[i].id).attr("onclick", "ale()");
+                    // $(".roadmap-title", clone).text(result.target[i].dptName);
                     // // $("#ctr-center .panel-body").append(clone);
                     // clone.appendTo($("#ctr-center .panel-body"));
-                    $("#worker-center .panel-body").append('<div class="worker-item">\n' +
-                        '            <span class="worker-ico"></span>\n' +
-                        '            <span class="worker-title">' + result.target[i].owner + '</span>\n' +
+                    $("#worker-center .panel-body").append('<div class="roadmap-item" resumeId="' + result.target[i].id + '">\n' +
+                        '            <span class="roadmap-ico"></span>\n' +
+                        '            <span class="roadmap-title">' + result.target[i].owner + '</span>\n' +
                         '        </div>')
                 }
+                $("#worker-center .roadmap-item").click(function () {
+                    alert($(this).attr("resumeId"))
+                })
             } else {
                 $("#worker-center .panel-body").text("未查询到数据");
             }
