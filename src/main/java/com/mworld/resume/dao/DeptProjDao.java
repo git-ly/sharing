@@ -2,6 +2,7 @@ package com.mworld.resume.dao;
 
 import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
+import com.mworld.resume.po.Resume;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,4 +38,6 @@ public interface DeptProjDao {
     public Integer saveProAndDpts(@Param("proId") Integer proId, @Param("list") List<Integer> list);
 
     public List<Department> findDpts(@Param("dptName") String dptName);
+
+    public List<Resume> findResumeOfPro(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId);
 }

@@ -3,6 +3,7 @@ package com.mworld.resume.service.impl;
 import com.mworld.resume.dao.DeptProjDao;
 import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
+import com.mworld.resume.po.Resume;
 import com.mworld.resume.service.DeptProjService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,5 +103,10 @@ public class DeptProjServiceImpl implements DeptProjService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Department> findDpts(String dptName) {
         return deptProjDao.findDpts(dptName);
+    }
+
+    @Override
+    public List<Resume> findResumeOfPro(Integer ctrId, Integer proId) {
+        return deptProjDao.findResumeOfPro(ctrId, proId);
     }
 }

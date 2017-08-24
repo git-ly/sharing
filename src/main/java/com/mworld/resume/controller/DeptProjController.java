@@ -6,9 +6,11 @@ import com.mworld.common.NoticeConst;
 import com.mworld.common.ValidMsg;
 import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
+import com.mworld.resume.po.Resume;
 import com.mworld.resume.service.DeptProjService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +33,45 @@ public class DeptProjController extends BaseController {
 
     @RequestMapping(value = "{option}/searchList", method = RequestMethod.POST)
     public void getSearchList(HttpServletRequest request, HttpServletResponse response, @PathVariable("option") String option) {
-        switch (option){
+        switch (option) {
             case "dpt":
                 String dptName = request.getParameter("dptName");
                 List<Department> dpts = deptProjService.findDpts(dptName);
+                if (CollectionUtils.isEmpty(dpts)){
+                    responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
+                    return;
+                }
                 response.setContentType("text/html;charset=UTF-8");
-                responseMsg(response,new Message<>(dpts,true,NoticeConst.GET_DATA_NOTICE));
+                responseMsg(response, new Message<>(dpts, true, NoticeConst.GET_DATA_NOTICE));
+                break;
+            case "proOfDpt":
+                String dptId = request.getParameter("ctrId");
+                if (StringUtils.isEmpty(dptId)) {
+                    responseMsg(response, new Message<>(false, NoticeConst.LACK_PARAMETERS));
+                    return;
+                }
+                List<Project> projects = deptProjService.findPrjOfDpt(Integer.valueOf(dptId.trim()));
+                if (CollectionUtils.isEmpty(projects)){
+                    responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
+                    return;
+                }
+                response.setContentType("text/html;charset=UTF-8");
+                responseMsg(response, new Message<>(projects, true, NoticeConst.GET_DATA_NOTICE));
+                break;
+            case "proOfResume":
+                String dptId2 = request.getParameter("ctrId");
+                String proId = request.getParameter("proId");
+                if (StringUtils.isEmpty(dptId2) || StringUtils.isEmpty(proId)){
+                    responseMsg(response, new Message<>(false, NoticeConst.LACK_PARAMETERS));
+                    return;
+                }
+                List<Resume> resumes = deptProjService.findResumeOfPro(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()));
+                if (CollectionUtils.isEmpty(resumes)){
+                    responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
+                    return;
+                }
+                response.setContentType("text/html;charset=UTF-8");
+                responseMsg(response, new Message<>(resumes, true, NoticeConst.GET_DATA_NOTICE));
                 break;
         }
 

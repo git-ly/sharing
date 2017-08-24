@@ -24,8 +24,8 @@
         INSERT INTO dpt_prj_mid(dpt_id,prj_id) VALUES (#{dptId},#{proId})
     </insert>
 
-    <select id="findPrjOfDpt" resultType="String">
-        SELECT p.pro_name FROM project p
+    <select id="findPrjOfDpt" resultType="Project">
+        SELECT p.id,p.pro_name FROM project p
         RIGHT JOIN dpt_prj_mid m ON p.id=m.prj_id
         WHERE m.dpt_id=#{dptId}
     </select>
@@ -82,4 +82,16 @@
         </where>
     </select>
 
+    <select id="findResumeOfPro" resultType="Resume">
+        SELECT
+        r.id,
+        r.owner
+        FROM resume r
+        RIGHT JOIN dpt_prj_res_mid m
+        ON r.id=m.res_id
+        left JOIN dpt_prj_mid dp
+        ON m.dpt_prj_id=dp.id
+        WHERE dp.dpt_id=#{ctrId}
+        AND dp.prj_id=#{proId}
+    </select>
 </mapper>
