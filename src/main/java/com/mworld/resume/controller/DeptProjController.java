@@ -123,7 +123,18 @@ public class DeptProjController extends BaseController {
                 saveCnt = deptProjService.saveDpt(saveTag);
                 break;
             case "pro":
-                saveCnt = deptProjService.savePrj(saveTag);
+                String dptId = request.getParameter("ctrId");
+                if (StringUtils.isEmpty(saveTag)) {
+                    responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
+                    return;
+                }
+                Project project = new Project(saveTag);
+                saveCnt = deptProjService.savePrj(project);
+
+
+
+
+                //TODO---------------------------------------------------------------------------
                 break;
             default:
                 responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));

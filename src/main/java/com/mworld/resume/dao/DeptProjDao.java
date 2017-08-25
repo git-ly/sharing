@@ -11,7 +11,7 @@ public interface DeptProjDao {
 
     public Integer saveDpt(String dptName);
 
-    public Integer savePrj(String proName);
+    public Integer savePrj(Project project);
 
     public Integer saveDptPo(Department dpt);
 

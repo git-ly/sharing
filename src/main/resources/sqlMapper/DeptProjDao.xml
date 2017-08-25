@@ -8,7 +8,7 @@
         INSERT INTO department(dpt_name) VALUE(#{dptName});
     </insert>
 
-    <insert id="savePrj" parameterType="String">
+    <insert id="savePrj" parameterType="Project">
         INSERT INTO project(pro_name) VALUE(#{proName});
     </insert>
 

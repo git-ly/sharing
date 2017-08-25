@@ -25,8 +25,8 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer savePrj(String proName) {
-        return deptProjDao.savePrj(proName);
+    public Integer savePrj(Project project) {
+        return deptProjDao.savePrj(project);
     }
 
     @Override
