@@ -19,6 +19,7 @@
             width: 100px;
             height: 100px;
             border: 3px solid transparent;
+            text-align: center;
         }
 
         .roadmap-title {
@@ -45,14 +46,25 @@
         }
 
         .roadmap-item:hover {
-            content: '-';
-            border: 3px solid brown;
+            border: 3px solid rgba(23, 44, 22, 0.2);
         }
 
+        .roadmap-item.active {
+            background: rgba(23, 44, 22, 0.2);
+        }
 
-        #search{
+        #search {
             position: fixed;
             top: 100px;
+        }
+
+        #pro-center .panel-heading .glyphicon, #ctr-center .panel-heading .glyphicon, #worker-center .panel-heading .glyphicon {
+            padding: 0 10px;
+        }
+
+        #pro-center .panel-heading .glyphicon:hover, #ctr-center .panel-heading .glyphicon:hover, #worker-center .panel-heading .glyphicon:hover {
+            color: rgba(99, 3, 22, 0.8);
+            cursor: pointer;
         }
 
     </style>
@@ -60,8 +72,9 @@
 <body>
 <div class="panel panel-default" id="ctr-center">
     <div class="panel-heading">
-        <h3 class="panel-title">中心
-            <span class="pull-right glyphicon glyphicon-plus col-md-1"></span>
+        <h3 class="panel-title">
+            <strong>中心</strong>
+            <span class="pull-right glyphicon glyphicon-plus"></span>
             <span class="pull-right glyphicon glyphicon-search"></span>
         </h3>
     </div>
@@ -72,8 +85,10 @@
 
 <div class="panel panel-default" id="pro-center">
     <div class="panel-heading">
-        <h3 class="panel-title">项目
-            <span class="pull-right glyphicon glyphicon-plus col-md-1"></span>
+        <h3 class="panel-title">
+            <strong>项目</strong>
+            <span class="process"></span>
+            <span class="pull-right glyphicon glyphicon-plus"></span>
             <span class="pull-right glyphicon glyphicon-search"></span>
         </h3>
     </div>
@@ -84,8 +99,10 @@
 
 <div class="panel panel-default" id="worker-center">
     <div class="panel-heading">
-        <h3 class="panel-title">人员
-            <span class="pull-right glyphicon glyphicon-plus col-md-1"></span>
+        <h3 class="panel-title">
+            <strong>人员</strong>
+            <span class="process"></span><span class="process"></span>
+            <span class="pull-right glyphicon glyphicon-plus"></span>
             <span class="pull-right glyphicon glyphicon-search"></span>
         </h3>
     </div>
@@ -97,6 +114,28 @@
 <div class="input-group col-lg-5 col-lg-offset-2" id="search">
     <input class="form-control input-lg" type="search" placeholder="搜索关键字">
     <span class="input-group-addon btn btn-default"><span class="glyphicon glyphicon-search"></span></span>
+</div>
+
+<div id="alertModal" class="modal fad" tabindex="-1" role="alertdialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">添加中心</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label for="" class="input-group-addon label-name">中心名称</label>
+                    <input type="text" class="form-control" name="checkName">
+                </div>
+                <small class="help-block"></small>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+                <button class="btn btn-primary commit-btn" type="button">提交</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <script type="text/javascript" src="<%=basePath%>js/ctrMange.js"></script>

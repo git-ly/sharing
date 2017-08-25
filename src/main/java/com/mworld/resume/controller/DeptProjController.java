@@ -90,7 +90,12 @@ public class DeptProjController extends BaseController {
                 cnt = deptProjService.findDptCntByName(checkName);
                 break;
             case "pro":
-                cnt = deptProjService.findPrjCntByName(checkName);
+                String dptId = request.getParameter("ctrId");
+                if (StringUtils.isEmpty(dptId)) {
+                    responseMsg(response, new ValidMsg(false));
+                    return;
+                }
+                cnt = deptProjService.findDptPrjCnt(Integer.valueOf(dptId.trim()), checkName);
                 break;
             default:
                 responseMsg(response, new ValidMsg(false));

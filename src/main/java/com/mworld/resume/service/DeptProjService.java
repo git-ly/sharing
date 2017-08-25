@@ -26,6 +26,8 @@ public interface DeptProjService {
 
     public Integer findDptCntPrj(String dptName, String proName);
 
+    public Integer findDptPrjCnt(Integer dptId, String proName);
+
     public Integer findDptIdByName(String dptName);
 
     public Integer findProIdByName(String proName);

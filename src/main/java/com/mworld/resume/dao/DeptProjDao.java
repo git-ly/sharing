@@ -27,6 +27,8 @@ public interface DeptProjDao {
 
     public Integer findDptCntPrj(@Param("dptName") String dptName, @Param("proName") String proName);
 
+    public Integer findDptPrjCnt(@Param("dptId") Integer dptId, @Param("proName") String proName);
+
     public Integer findDptIdByName(String dptName);
 
     public Integer findProIdByName(String proName);

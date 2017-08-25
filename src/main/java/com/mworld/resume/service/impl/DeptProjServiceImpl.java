@@ -109,4 +109,9 @@ public class DeptProjServiceImpl implements DeptProjService {
     public List<Resume> findResumeOfPro(Integer ctrId, Integer proId) {
         return deptProjDao.findResumeOfPro(ctrId, proId);
     }
+
+    @Override
+    public Integer findDptPrjCnt(Integer dptId, String proName) {
+        return deptProjDao.findDptPrjCnt(dptId, proName);
+    }
 }

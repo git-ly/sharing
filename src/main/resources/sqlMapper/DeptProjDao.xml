@@ -47,6 +47,15 @@
         AND p.pro_name=#{proName}
     </select>
 
+    <select id="findDptPrjCnt" resultType="int">
+        SELECT COUNT(1)
+        FROM dpt_prj_mid m
+        LEFT JOIN department d ON m.dpt_id=d.id
+        LEFT JOIN project p ON m.prj_id=p.id
+        WHERE d.id=#{dptId}
+        AND p.pro_name=#{proName}
+    </select>
+
     <select id="findDptIdByName" resultType="int">
         SELECT id from department where dpt_name=#{dptName}
     </select>
