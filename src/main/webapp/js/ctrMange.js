@@ -1,5 +1,8 @@
 var ctrFn = {
     optCtr: '',
+    ctrPage: {flag: true, cnt: 0},
+    proPage: {flag: true, cnt: 0},
+    resPage: {flag: true, cnt: 0},
     url: {
         dptList: host + "organize/dpt/searchList",
         proList: host + "organize/proOfDpt/searchList",
@@ -95,33 +98,59 @@ var ctrFn = {
                 $("#search").hide(500);
         });
     },
-    initCtrList: function () {
+    initCtrList: function (start, size) {
+        start = start ? start : 1;
+        size = size ? size : 9;
         $.ajax({
             url: ctrFn.url.dptList,
             type: 'POST',
             data: {
-                page: 1,
-                size: 9
+                start: start,
+                size: size
             },
             success: function (data) {
                 var result = JSON.parse(data);
                 $("#ctr-center .panel-body").html("");
                 if (result.success) {
-                    for (var i = 0; i < result.target.length; i++) {
-                        $("#ctr-center .panel-body").append('<div class="roadmap-item") ctrId="' + result.target[i].id + '" ctrName="' + result.target[i].dptName + '">\n' +
+                    var list = result.target.data;
+                    ctrFn.ctrPage.cnt = result.target.counts;
+                    for (var i = 0; i < list.length; i++) {
+                        $("#ctr-center .panel-body").append('<div class="roadmap-item") ctrId="' + list[i].id + '" ctrName="' + list[i].dptName + '">\n' +
                             '            <span class="roadmap-ico"></span>\n' +
                             // '            <span class="glyphicon glyphicon-minus pull-right"></span>\n' +
-                            '            <span class="roadmap-title">' + result.target[i].dptName + '</span>\n' +
+                            '            <span class="roadmap-title">' + list[i].dptName + '</span>\n' +
                             '        </div>');
                     }
+                    while (ctrFn.ctrPage.flag) {
+                        $(".ctr-box").jqPaginator({
+                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
+                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
+                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
+                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
+                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+                            // totalPages: 5,
+                            totalCounts: ctrFn.ctrPage.cnt,
+                            pageSize: 9,
+                            currentPage: 1,
+                            visiblePages: 0,
+                            disableClass: 'disabled',
+                            activeClass: 'active',
+                            onPageChange: function (n) {
+                                ctrFn.initCtrList(n, this.pageSize)
+                            }
+                        });
+                        ctrFn.ctrPage.flag = false;
+                    }
+
                     $("#ctr-center .roadmap-item").unbind().bind("click", function () {
                         if (!$(this).hasClass("active")) {
                             $(this).addClass("active").siblings(".roadmap-item").removeClass("active");
-                            ctrFn.findPrt($(this).attr("ctrId"));
-                            ctrFn.optCtr = $(this).attr("ctrId");
                             $("#pro-center .process,#worker-center .process:eq(0)").text(">>" + $(this).attr("ctrName"));
                             $("#worker-center .process:eq(1)").text("");
+                            $("#pro-center .panel-body").html("请选择中心");
                             $("#worker-center .panel-body").text("未选择项目");
+                            ctrFn.findPrt($(this).attr("ctrId"));
+                            ctrFn.optCtr = $(this).attr("ctrId");
                         }
                     })
                 } else {
@@ -130,30 +159,55 @@ var ctrFn = {
             }
         })
     },
-    findPrt: function (id) {
+    findPrt: function (id, start, size) {
+        start = start ? start : 1;
+        size = size ? size : 9;
         $.ajax({
             url: ctrFn.url.proList,
             type: 'POST',
             data: {
                 ctrId: id,
-                page: 1,
-                size: 9
+                start: start,
+                size: size
             },
             success: function (data) {
                 var result = JSON.parse(data);
+                ctrFn.proPage.cnt = result.target.counts;
                 $("#pro-center .panel-body").html("");
                 if (result.success) {
-                    for (var i = 0; i < result.target.length; i++) {
-                        $("#pro-center .panel-body").append('<div class="roadmap-item" pCtrId="' + id + '" iProId="' + result.target[i].id + '" iProName="' + result.target[i].proName + '">\n' +
+                    var list = result.target.data;
+                    for (var i = 0; i < list.length; i++) {
+                        $("#pro-center .panel-body").append('<div class="roadmap-item" pCtrId="' + id + '" iProId="' + list[i].id + '" iProName="' + list[i].proName + '">\n' +
                             '            <span class="roadmap-ico"></span>\n' +
-                            '            <span class="roadmap-title">' + result.target[i].proName + '</span>\n' +
+                            '            <span class="roadmap-title">' + list[i].proName + '</span>\n' +
                             '        </div>')
                     }
 
+                    while (ctrFn.proPage.flag) {
+                        $(".pro-box").jqPaginator({
+                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
+                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
+                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
+                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
+                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+                            // totalPages: 5,
+                            totalCounts: ctrFn.proPage.cnt,
+                            pageSize: 9,
+                            currentPage: 1,
+                            visiblePages: 7,
+                            disableClass: 'disabled',
+                            activeClass: 'active',
+                            onPageChange: function (n) {
+                                ctrFn.findPrt(id, n, this.pageSize)
+                            }
+                        });
+                        ctrFn.proPage.flag = false;
+                    }
                     $("#pro-center .roadmap-item").unbind().bind("click", function () {
                         $(this).addClass("active").siblings(".roadmap-item").removeClass("active");
+                        $("#worker-center .process:eq(1)").text(">>" + $(this).attr("iProName"));
+                        $("#worker-center .panel-body").html("请选择项目");
                         ctrFn.findWorker($(this).attr("pCtrId"), $(this).attr("iProId"));
-                        $("#worker-center .process:eq(1)").text(">>" + $(this).attr("iProName"))
                     });
                 } else {
                     $("#pro-center .panel-body").text("未查询到数据");
@@ -161,25 +215,49 @@ var ctrFn = {
             }
         })
     },
-    findWorker: function (ctrId, proId) {
+    findWorker: function (ctrId, proId, start, size) {
+        start = start ? start : 1;
+        size = size ? size : 9;
         $.ajax({
             url: ctrFn.url.resumeList,
             type: 'POST',
             data: {
                 ctrId: ctrId,
                 proId: proId,
-                page: 1,
-                size: 9
+                start: start,
+                size: size
             },
             success: function (data) {
                 var result = JSON.parse(data);
+                var list = result.target.data;
+                ctrFn.resPage.cnt = result.target.counts;
                 $("#worker-center .panel-body").html("");
                 if (result.success) {
-                    for (var i = 0; i < result.target.length; i++) {
-                        $("#worker-center .panel-body").append('<div class="roadmap-item" resumeId="' + result.target[i].id + '">\n' +
+                    for (var i = 0; i < list.length; i++) {
+                        $("#worker-center .panel-body").append('<div class="roadmap-item" resumeId="' + list[i].id + '">\n' +
                             '            <span class="roadmap-ico"></span>\n' +
-                            '            <span class="roadmap-title">' + result.target[i].owner + '</span>\n' +
+                            '            <span class="roadmap-title">' + list[i].owner + '</span>\n' +
                             '        </div>')
+                    }
+                    while (ctrFn.resPage.flag) {
+                        $(".res-box").jqPaginator({
+                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
+                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
+                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
+                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
+                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+                            // totalPages: 5,
+                            totalCounts: ctrFn.resPage.cnt,
+                            pageSize: 9,
+                            currentPage: 1,
+                            visiblePages: 7,
+                            disableClass: 'disabled',
+                            activeClass: 'active',
+                            onPageChange: function (n) {
+                                ctrFn.findWorker(ctrId, proId, n, this.pageSize)
+                            }
+                        });
+                        ctrFn.resPage.flag = false;
                     }
                 } else {
                     $("#worker-center .panel-body").text("未查询到数据");

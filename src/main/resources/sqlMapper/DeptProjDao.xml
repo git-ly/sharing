@@ -28,6 +28,14 @@
         SELECT p.id,p.pro_name FROM project p
         RIGHT JOIN dpt_prj_mid m ON p.id=m.prj_id
         WHERE m.dpt_id=#{dptId}
+        ORDER BY p.id
+        limit #{start}, #{size}
+    </select>
+
+    <select id="findPrjOfDptCnt" resultType="int">
+        SELECT count(p.id) FROM project p
+        RIGHT JOIN dpt_prj_mid m ON p.id=m.prj_id
+        WHERE m.dpt_id=#{dptId}
     </select>
 
     <select id="findDptCntByName" resultType="int">
@@ -89,12 +97,37 @@
                 dpt_name LIKE concat('%',concat(#{dptName}, '%'))
             </if>
         </where>
+        ORDER BY id
+        limit #{start}, #{size}
+    </select>
+
+    <select id="findDptsCnt" resultType="int">
+        SELECT count(id) FROM department
+        <where>
+            <if test="dptName != null and dptName != ''">
+                dpt_name LIKE concat('%',concat(#{dptName}, '%'))
+            </if>
+        </where>
     </select>
 
     <select id="findResumeOfPro" resultType="Resume">
         SELECT
         r.id,
         r.owner
+        FROM resume r
+        RIGHT JOIN dpt_prj_res_mid m
+        ON r.id=m.res_id
+        left JOIN dpt_prj_mid dp
+        ON m.dpt_prj_id=dp.id
+        WHERE dp.dpt_id=#{ctrId}
+        AND dp.prj_id=#{proId}
+        ORDER BY r.id
+        limit #{start}, #{size}
+    </select>
+
+    <select id="findResumeOfProCnt" resultType="int">
+        SELECT
+        count(r.id)
         FROM resume r
         RIGHT JOIN dpt_prj_res_mid m
         ON r.id=m.res_id

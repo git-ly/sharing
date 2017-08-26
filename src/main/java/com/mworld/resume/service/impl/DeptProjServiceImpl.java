@@ -1,5 +1,6 @@
 package com.mworld.resume.service.impl;
 
+import com.mworld.common.PageUtil;
 import com.mworld.resume.dao.DeptProjDao;
 import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
@@ -49,8 +50,9 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<Project> findPrjOfDpt(Integer dptId) {
-        return deptProjDao.findPrjOfDpt(dptId);
+    public List<Project> findPrjOfDpt(Integer dptId, Integer start, Integer size) {
+        PageUtil pageUtil = new PageUtil(start, size);
+        return deptProjDao.findPrjOfDpt(dptId, pageUtil.getStart(), pageUtil.getSize());
     }
 
     @Override
@@ -101,17 +103,39 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<Department> findDpts(String dptName) {
-        return deptProjDao.findDpts(dptName);
+    public List<Department> findDpts(String dptName, Integer start, Integer size) {
+        PageUtil pageUtil = new PageUtil(start, size);
+        return deptProjDao.findDpts(dptName, pageUtil.getStart(), pageUtil.getSize());
     }
 
     @Override
-    public List<Resume> findResumeOfPro(Integer ctrId, Integer proId) {
-        return deptProjDao.findResumeOfPro(ctrId, proId);
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<Resume> findResumeOfPro(Integer ctrId, Integer proId, Integer start, Integer size) {
+        PageUtil pageUtil = new PageUtil(start, size);
+        return deptProjDao.findResumeOfPro(ctrId, proId, pageUtil.getStart(), pageUtil.getSize());
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Integer findDptPrjCnt(Integer dptId, String proName) {
         return deptProjDao.findDptPrjCnt(dptId, proName);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Integer findPrjOfDptCnt(Integer dptId) {
+        return deptProjDao.findPrjOfDptCnt(dptId);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Integer findDptsCnt(String dptName) {
+        return deptProjDao.findDptsCnt(dptName);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Integer findResumeOfProCnt(Integer ctrId, Integer proId) {
+        return deptProjDao.findResumeOfProCnt(ctrId, proId);
     }
 }

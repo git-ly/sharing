@@ -19,7 +19,9 @@ public interface DeptProjDao {
 
     public Integer saveDptPrj(@Param("dptId") Integer dptName, @Param("proId") Integer proId);
 
-    public List<Project> findPrjOfDpt(Integer dptId);
+    public List<Project> findPrjOfDpt(@Param("dptId") Integer dptId, @Param("start") Integer start, @Param("size") Integer size);
+
+    public Integer findPrjOfDptCnt(@Param("dptId") Integer dptId);
 
     public Integer findDptCntByName(String dptName);
 
@@ -39,7 +41,11 @@ public interface DeptProjDao {
 
     public Integer saveProAndDpts(@Param("proId") Integer proId, @Param("list") List<Integer> list);
 
-    public List<Department> findDpts(@Param("dptName") String dptName);
+    public List<Department> findDpts(@Param("dptName") String dptName, @Param("start") Integer start, @Param("size") Integer size);
 
-    public List<Resume> findResumeOfPro(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId);
+    public Integer findDptsCnt(@Param("dptName") String dptName);
+
+    public List<Resume> findResumeOfPro(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId, @Param("start") Integer start, @Param("size") Integer size);
+
+    public Integer findResumeOfProCnt(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId);
 }

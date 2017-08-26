@@ -18,7 +18,9 @@ public interface DeptProjService {
 
     public Integer saveDptPrj(Integer dptId, Integer proId);
 
-    public List<Project> findPrjOfDpt(Integer dptId);
+    public List<Project> findPrjOfDpt(Integer dptId, Integer start, Integer size);
+
+    public Integer findPrjOfDptCnt(Integer dptId);
 
     public Integer findDptCntByName(String dptName);
 
@@ -38,7 +40,11 @@ public interface DeptProjService {
 
     public Integer saveProAndDpts(Integer proId, List<Integer> list);
 
-    public List<Department> findDpts(String dptName);
+    public List<Department> findDpts(String dptName, Integer start, Integer size);
 
-    public List<Resume> findResumeOfPro(Integer ctrId, Integer proId);
+    public Integer findDptsCnt(String dptName);
+
+    public List<Resume> findResumeOfPro(Integer ctrId, Integer proId, Integer start, Integer size);
+
+    public Integer findResumeOfProCnt(Integer ctrId, Integer proId);
 }

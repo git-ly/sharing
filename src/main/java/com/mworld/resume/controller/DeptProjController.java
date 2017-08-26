@@ -1,9 +1,6 @@
 package com.mworld.resume.controller;
 
-import com.mworld.common.BaseController;
-import com.mworld.common.Message;
-import com.mworld.common.NoticeConst;
-import com.mworld.common.ValidMsg;
+import com.mworld.common.*;
 import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
 import com.mworld.resume.po.Resume;
@@ -33,16 +30,26 @@ public class DeptProjController extends BaseController {
 
     @RequestMapping(value = "{option}/searchList", method = RequestMethod.POST)
     public void getSearchList(HttpServletRequest request, HttpServletResponse response, @PathVariable("option") String option) {
+        String startStr = request.getParameter("start");
+        String sizeStr = request.getParameter("size");
+        Integer start = StringUtils.isEmpty(startStr) ? 1 : Integer.valueOf(startStr);
+        Integer size = StringUtils.isEmpty(sizeStr) ? 9 : Integer.valueOf(sizeStr);
+        Integer count;
         switch (option) {
             case "dpt":
                 String dptName = request.getParameter("dptName");
-                List<Department> dpts = deptProjService.findDpts(dptName);
-                if (CollectionUtils.isEmpty(dpts)){
+                count = deptProjService.findDptsCnt(dptName);
+                if (null == count || count < 1) {
+                    responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
+                    return;
+                }
+                List<Department> dpts = deptProjService.findDpts(dptName, start, size);
+                if (CollectionUtils.isEmpty(dpts)) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
                 }
                 response.setContentType("text/html;charset=UTF-8");
-                responseMsg(response, new Message<>(dpts, true, NoticeConst.GET_DATA_NOTICE));
+                responseMsg(response, new Message<>(new ResponseVo<>(dpts, count), true, NoticeConst.GET_DATA_NOTICE));
                 break;
             case "proOfDpt":
                 String dptId = request.getParameter("ctrId");
@@ -50,28 +57,38 @@ public class DeptProjController extends BaseController {
                     responseMsg(response, new Message<>(false, NoticeConst.LACK_PARAMETERS));
                     return;
                 }
-                List<Project> projects = deptProjService.findPrjOfDpt(Integer.valueOf(dptId.trim()));
-                if (CollectionUtils.isEmpty(projects)){
+                count = deptProjService.findPrjOfDptCnt(Integer.valueOf(dptId.trim()));
+                if (null == count || count < 1) {
+                    responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
+                    return;
+                }
+                List<Project> projects = deptProjService.findPrjOfDpt(Integer.valueOf(dptId.trim()), start, size);
+                if (CollectionUtils.isEmpty(projects)) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
                 }
                 response.setContentType("text/html;charset=UTF-8");
-                responseMsg(response, new Message<>(projects, true, NoticeConst.GET_DATA_NOTICE));
+                responseMsg(response, new Message<>(new ResponseVo<>(projects, count), true, NoticeConst.GET_DATA_NOTICE));
                 break;
             case "proOfResume":
                 String dptId2 = request.getParameter("ctrId");
                 String proId = request.getParameter("proId");
-                if (StringUtils.isEmpty(dptId2) || StringUtils.isEmpty(proId)){
+                if (StringUtils.isEmpty(dptId2) || StringUtils.isEmpty(proId)) {
                     responseMsg(response, new Message<>(false, NoticeConst.LACK_PARAMETERS));
                     return;
                 }
-                List<Resume> resumes = deptProjService.findResumeOfPro(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()));
-                if (CollectionUtils.isEmpty(resumes)){
+                count = deptProjService.findResumeOfProCnt(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()));
+                if (null == count || count < 1) {
+                    responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
+                    return;
+                }
+                List<Resume> resumes = deptProjService.findResumeOfPro(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()), start, size);
+                if (CollectionUtils.isEmpty(resumes)) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
                 }
                 response.setContentType("text/html;charset=UTF-8");
-                responseMsg(response, new Message<>(resumes, true, NoticeConst.GET_DATA_NOTICE));
+                responseMsg(response, new Message<>(new ResponseVo<>(resumes, count), true, NoticeConst.GET_DATA_NOTICE));
                 break;
         }
 
@@ -130,8 +147,6 @@ public class DeptProjController extends BaseController {
                 }
                 Project project = new Project(saveTag);
                 saveCnt = deptProjService.savePrj(project);
-
-
 
 
                 //TODO---------------------------------------------------------------------------

@@ -16,7 +16,7 @@
     <style>
         .roadmap-item {
             display: inline-block;
-            width: calc(11% - 6px);
+            width: calc((100% - 70px) / 9 - 6px);
             height: 100px;
             border: 3px solid transparent;
             text-align: center;
@@ -58,19 +58,67 @@
             top: 100px;
         }
 
-        #pro-center .panel-heading .glyphicon, #ctr-center .panel-heading .glyphicon, #worker-center .panel-heading .glyphicon {
+        .tar-center .panel-heading .glyphicon {
             padding: 0 10px;
         }
 
-        #pro-center .panel-heading .glyphicon:hover, #ctr-center .panel-heading .glyphicon:hover, #worker-center .panel-heading .glyphicon:hover {
+        .tar-center .panel-heading .glyphicon:hover {
             color: rgba(99, 3, 22, 0.8);
             cursor: pointer;
+        }
+
+        .tar-center {
+            position: relative;
+        }
+
+        .tar-center .panel-body div {
+            z-index: 100;
+        }
+
+        .tar-center .panel-body div:first-child {
+            margin-left: 35px;
+        }
+
+        .ctr-box {
+            position: relative;
+        }
+
+        .prev, .next {
+            list-style: none;
+            position: absolute;
+            bottom: 30px;
+            height: 80px;
+            border-radius: 25px;
+            line-height: 80px;
+            display: none;
+            text-align: center;
+            width: 20px;
+            font-size: 20px;
+            font-weight: 900;
+            background: rgba(33, 33, 33, 0.2);
+            color: white;
+        }
+
+        .tar-center:hover .prev, .tar-center:hover .next {
+            display: inline-block;
+        }
+
+        .prev:hover, .next:hover {
+            background: rgba(33, 33, 33, 0.5);
+        }
+
+        .prev {
+            left: 5px;
+        }
+
+        .next {
+            right: 5px;
         }
 
     </style>
 </head>
 <body>
-<div class="panel panel-default" id="ctr-center">
+<div class="panel panel-default tar-center" id="ctr-center">
     <div class="panel-heading">
         <h3 class="panel-title">
             <strong>中心</strong>
@@ -81,9 +129,10 @@
     <div class="panel-body">
         <h5>未选择中心</h5>
     </div>
+    <div class="ctr-box"></div>
 </div>
 
-<div class="panel panel-default" id="pro-center">
+<div class="panel panel-default tar-center" id="pro-center">
     <div class="panel-heading">
         <h3 class="panel-title">
             <strong>项目</strong>
@@ -95,9 +144,10 @@
     <div class="panel-body">
         <h5>未选择中心</h5>
     </div>
+    <div class="pro-box"></div>
 </div>
 
-<div class="panel panel-default" id="worker-center">
+<div class="panel panel-default tar-center" id="worker-center">
     <div class="panel-heading">
         <h3 class="panel-title">
             <strong>人员</strong>
@@ -109,6 +159,7 @@
     <div class="panel-body">
         <h5>未选择项目</h5>
     </div>
+    <div class="res-box"></div>
 </div>
 
 <div class="input-group col-lg-5 col-lg-offset-2" id="search">
@@ -125,7 +176,7 @@
             </div>
             <div class="modal-body">
                 <div class="input-group">
-                    <label for="" class="input-group-addon label-name">中心名称</label>
+                    <label class="input-group-addon label-name">中心名称</label>
                     <input type="text" class="form-control" name="checkName">
                 </div>
                 <small class="help-block"></small>
@@ -138,6 +189,7 @@
     </div>
 </div>
 </body>
+<script type="text/javascript" src="<%=basePath%>js/jqPaginator.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/ctrMange.js"></script>
 
 </html>
