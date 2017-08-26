@@ -16,7 +16,7 @@
     <style>
         .roadmap-item {
             display: inline-block;
-            width: 100px;
+            width: calc(11% - 6px);
             height: 100px;
             border: 3px solid transparent;
             text-align: center;

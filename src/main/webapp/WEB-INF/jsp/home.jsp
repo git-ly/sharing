@@ -20,7 +20,7 @@
     <link href="<%=path%>js/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="<%=path%>css/bootstrapValidator.min.css" rel="stylesheet" type="text/css">
     <style>
-        .loading{
+        .loading {
             display: inline-block;
             background: url("/css/images/gif/loding.gif");
             background-size: 89px 90px;
@@ -99,8 +99,16 @@
             font-size: 16px;
         }
 
-        .info-tip{
+        .info-tip {
             height: 16px;
+        }
+
+        #tipBox {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            min-width: 300px;
+            min-height: 120px;
         }
     </style>
 </head>
@@ -124,28 +132,37 @@
     <ul class="nav nav-pills nav-stacked menu"></ul>
 </aside>
 
-<div class="col-md-9 main-contain">
-
-</div>
-
-<div></div>
-
+<div class="col-md-9 main-contain"></div>
 <div id="notice-contain"></div>
-<%--<div class="modal fad noticeModal" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">--%>
-<%--<div class="modal-dialog">--%>
-<%--<div class="modal-content">--%>
-<%--<div class="modal-header">--%>
-<%--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>--%>
-<%--<h4 class="modal-title" id="myModalLabel">Notice</h4>--%>
-<%--</div>--%>
-<%--<div class="modal-text">text</div>--%>
-<%--<div class="modal-footer">--%>
-<%--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>--%>
-<%--<button type="button" class="btn btn-primary" id="sure-btn">提交更改</button>--%>
-<%--</div>--%>
-<%--</div>--%>
-<%--</div>--%>
-<%--</div>--%>
+
+<!-- 消信提示框-->
+<div id="tipBox" class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            <strong>提示</strong>
+            <span class="close">&times;</span>
+        </div>
+    </div>
+    <div class="panel-body"></div>
+</div>
+<!-- 模态框 -->
+<div class="modal fad noticeModal" id="tipMod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Notice</h4>
+            </div>
+            <div class="modal-text">text</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="sure-btn">提交更改</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script type="text/javascript" src="<%=basePath%>js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/common.js"></script>

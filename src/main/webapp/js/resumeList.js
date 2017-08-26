@@ -91,7 +91,7 @@ $(function () {
                 }
             })
         }
-    }
+    } 
 
     resumeList.fillList();
     $(".resume-search-btn").click(function () {

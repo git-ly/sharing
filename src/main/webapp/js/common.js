@@ -1,38 +1,59 @@
 var tip = {
-    modalTem : $('<div class="modal fad noticeModal" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-            '<div class="modal-dialog">' +
-            '<div class="modal-content">' +
-            '<div class="modal-header">' +
-            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-            '<h4 class="modal-title" id="myModalLabel">Notice</h4>' +
-            '</div>' +
-            '<div class="modal-body">text</div>' +
-            '<div class="modal-footer">' +
-            '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>' +
-            '<button type="button" class="btn btn-primary" id="sure-btn">提交更改</button>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>'),
-    fillMsgBox : function (info) {
-
-        if (!info)
-            return;
-        if (info.title)
-            $("#noticeModal .modal-title").html(info.title);
-        if (info.text)
-            $("#noticeModal .modal-body").html(info.text);
-        if (info.closeBtnName)
-            $("#noticeModal .close-btn").text(info.closeBtnName);
-        if (info.closeBtnHide)
-            $("#noticeModal .close-btn").hide();
-        if (info.sureBtnName)
-            $("#noticeModal .sure-btn").text(info.sureBtnName);
-        if (info.sureBtnHide)
-            $("#noticeModal .sure-btn").hide();
-
-
+    tipMod: function (init) {
+        var $mod = init && init.mod ? $("#" + init.mod) : $("#tipMod");
+        if (init) {
+            if (init.title)
+                $mod.find(".modal-title").html(init.title);
+            if (init.text)
+                $mod.find(".modal-body").html(init.text);
+            if (init.closeBtnName)
+                $mod.find(".close-btn").text(init.closeBtnName);
+            if (init.closeBtnHide)
+                $mod.find(".close-btn").hide();
+            if (init.sureBtnName)
+                $mod.find(".sure-btn").text(init.sureBtnName);
+            if (init.sureBtnHide)
+                $mod.find(".sure-btn").hide();
+        }
+        $mod.modal();
+    },
+    tipBox: function (init, autoClose) {
+        var $mod = init && init.mod ? $("#" + init.mod) : $("#tipBox");
+        var type = init && init.type ? init.type : "info";
+        var $mark = $mod.find(".panel-title").find("span").eq(0);
+        var $title = $mod.find(".panel-title").find("strong").eq(0);
+        switch (type) {
+            case 'info':
+                $mark.removeClass().addClass("glyphicon glyphicon-info-sign");
+                $title.html("提示");
+                break;
+            case "warn":
+                $mark.removeClass().addClass("glyphicon glyphicon-warning-sign");
+                $title.html("警告");
+                break;
+            case "err":
+                $mark.removeClass().addClass("glyphicon glyphicon-exclamation-sign");
+                $title.html("错误");
+                break;
+        }
+        if (init) {
+            if (init.title)
+                $mod.find(".panel-title").find("strong").html(init.title);
+            if (init.text)
+                $mod.find(".panel-body").html(init.text);
+        }
+        $mod.show(500);
+        $mod.find(".close").unbind().bind("click", function () {
+            $mod.hide(500)
+        })
+        if (autoClose) {
+            setTimeout(function () {
+                $mod.hide(500);
+            }, 5000);
+        }
     }
-
-
 }
+
+$(function () {
+    $("#tipBox").hide();
+})
