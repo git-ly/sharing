@@ -149,6 +149,10 @@ var ctrFn = {
                             $("#worker-center .process:eq(1)").text("");
                             $("#pro-center .panel-body").html("请选择中心");
                             $("#worker-center .panel-body").text("未选择项目");
+                            $("#pro-center .pro-box").html("");
+                            $("#worker-center .res-box").html("");
+                            ctrFn.proPage.flag = true;
+                            ctrFn.resPage.flag = true;
                             ctrFn.findPrt($(this).attr("ctrId"));
                             ctrFn.optCtr = $(this).attr("ctrId");
                         }
@@ -207,6 +211,8 @@ var ctrFn = {
                         $(this).addClass("active").siblings(".roadmap-item").removeClass("active");
                         $("#worker-center .process:eq(1)").text(">>" + $(this).attr("iProName"));
                         $("#worker-center .panel-body").html("请选择项目");
+                        $("#worker-center .res-box").html("");
+                        ctrFn.resPage.flag = true;
                         ctrFn.findWorker($(this).attr("pCtrId"), $(this).attr("iProId"));
                     });
                 } else {
