@@ -56,23 +56,34 @@ var ctrFn = {
                     // success: options.ajax.success,
                     success: options.ajax.success ? options.ajax.success : function (data) {
                         var result = JSON.parse(data);
-                        if (!result.valid)
+                        if (!result.valid) {
+                            $("#alertModal .help-block").text("已添加，不可使用");
                             return;
+                        }
                         $("#alertModal .help-block").text("可以使用");
                         $("#alertModal .commit-btn").unbind().bind("click", function () {
+                            var saveData = {
+                                saveName: $("#alertModal [name='checkName']").val(),
+                                ctrId: ctrFn.optCtr
+                            };
+
                             $.ajax({
                                 url: options.ajax.saveUrl,
                                 type: 'POST',
-                                data: {saveName: $("#alertModal [name='checkName']").val()},
+                                // data: {saveName: $("#alertModal [name='checkName']").val()},
+                                data: saveData,
                                 success: function (result) {
                                     var data = JSON.parse(result)
                                     if (data && data.success == true) {
                                         tip.tipBox({text: options.checkCtx.val() + "添加成功"}, true);
                                         $("#alertModal").modal('hide');
+                                    } else {
+                                        tip.tipBox({type: 'warn', text: options.checkCtx.val() + "添加失败"}, true);
+                                        $("#alertModal").modal('hide');
                                     }
                                 },
                                 error: function () {
-                                    tip.tipBox({type: 'warn', text: options.checkCtx.val() + "添加失败"}, true);
+                                    tip.tipBox({type: 'err', text: options.checkCtx.val() + "添加失败，服务器故障"}, true);
                                     $("#alertModal").modal('hide');
                                 }
                             })
@@ -115,7 +126,7 @@ var ctrFn = {
                     var list = result.target.data;
                     ctrFn.ctrPage.cnt = result.target.counts;
                     for (var i = 0; i < list.length; i++) {
-                        $("#ctr-center .panel-body").append('<div class="roadmap-item") ctrId="' + list[i].id + '" ctrName="' + list[i].dptName + '">\n' +
+                        $("#ctr-center .panel-body").append('<div class="roadmap-item" ctrId="' + list[i].id + '" ctrName="' + list[i].dptName + '">\n' +
                             '            <span class="roadmap-ico"></span>\n' +
                             // '            <span class="glyphicon glyphicon-minus pull-right"></span>\n' +
                             '            <span class="roadmap-title">' + list[i].dptName + '</span>\n' +
@@ -177,10 +188,10 @@ var ctrFn = {
             },
             success: function (data) {
                 var result = JSON.parse(data);
-                ctrFn.proPage.cnt = result.target.counts;
                 $("#pro-center .panel-body").html("");
                 if (result.success) {
                     var list = result.target.data;
+                    ctrFn.proPage.cnt = result.target.counts;
                     for (var i = 0; i < list.length; i++) {
                         $("#pro-center .panel-body").append('<div class="roadmap-item" pCtrId="' + id + '" iProId="' + list[i].id + '" iProName="' + list[i].proName + '">\n' +
                             '            <span class="roadmap-ico"></span>\n' +
@@ -238,10 +249,10 @@ var ctrFn = {
             },
             success: function (data) {
                 var result = JSON.parse(data);
-                var list = result.target.data;
-                ctrFn.resPage.cnt = result.target.counts;
                 $("#worker-center .panel-body").html("");
                 if (result.success) {
+                    var list = result.target.data;
+                    ctrFn.resPage.cnt = result.target.counts;
                     for (var i = 0; i < list.length; i++) {
                         $("#worker-center .panel-body").append('<div class="roadmap-item" resumeId="' + list[i].id + '">\n' +
                             '            <span class="roadmap-ico"></span>\n' +
@@ -295,7 +306,7 @@ $(function () {
             checkData: {},
             saveUrl: ctrFn.url.dptAdd
         }
-    })
+    }, false)
 
     //给中心添加新项目
     ctrFn.addOpt({
@@ -311,5 +322,11 @@ $(function () {
             checkData: {},
             saveUrl: ctrFn.url.proAdd
         }
-    }, true)
+    }, true);
+
+    $("#worker-center .panel-title .glyphicon-plus").unbind().bind("click", function () {
+        tip.tipMod({
+            mod : 'wkAddMod'
+        })
+    })
 })

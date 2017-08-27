@@ -55,15 +55,25 @@ $(function () {
 
     $(".menu").html(mDom);
 
-    var roleNum = parseInt(loginInfo.role);
+    var roleNum = parseInt(loginInfo.role), roleName;
     if (roleNum == 1) {
         $(".main-contain").html('<span class="loading"></span>').load(host + "authorization/view");
+        roleName="系统管理员";
         // $("[menuUrl='addAdmin']").addClass("active");
     } else if (roleNum == 2) {
         $(".main-contain").html('<span class="loading"></span>').load(host + "resumeList/view");
+        roleName="管理员";
     } else if (roleNum == 3) {
-        $(".main-contain").html('<span class="loading"></span>').load(host + "sourceList/view")
+        $(".main-contain").html('<span class="loading"></span>').load(host + "sourceList/view");
+        roleName="用户";
     }
+    
+    $(".login-acct").text(loginInfo.acct);
+    $(".login-role").text(roleName);
+
+    $("#login-down").unbind().bind("click", function () {
+        $("#login-info").slideToggle(100);
+    });
 
     $(".menu-list-item").click(function () {
         var url = $(this).attr("menuUrl");
@@ -72,16 +82,15 @@ $(function () {
     })
 
 
-    $(".reset-pwd-btn").click(function () {
+    $("#reset-pwd-btn").click(function () {
         $("#notice-contain").html(modalTem);
-        fillMsgBox({
+        tip.tipMod({
             title: '修改密码',
             text: '<div class="input-group"><span class="input-group-addon">新密码</span> <input type="password" class="form-control"></div>' +
             '<div class="info-tip"></div>' +
             '<div class="input-group"><span class="input-group-addon">确认密码</span> <input type="password" class="form-control"></div>' +
             '<div class="info-tip"></div>'
         })
-        $("#noticeModal").modal();
 
     })
 
@@ -104,4 +113,8 @@ $(function () {
         console.log(info)
 
     }
+
+    $("#exit-btn").unbind().bind("click", function () {
+        document.location.href = host + "logout";
+    })
 })

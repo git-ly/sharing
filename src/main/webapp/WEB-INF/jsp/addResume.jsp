@@ -31,7 +31,9 @@
         .searchable-select{
             z-index: 1;
         }
-
+        .searchable-select-items{
+            max-height: 150px;
+        }
 
     </style>
     <%--<style type="text/css" media="screen">--%>

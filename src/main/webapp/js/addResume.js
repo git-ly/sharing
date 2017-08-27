@@ -202,12 +202,14 @@ $("#resume-upload").bootstrapValidator({
 
 $(function () {
     $.ajax({
-        url: host + 'organize/dpt/searchList',
+        url: host + 'organize/dpsTotal/searchList',
         type: 'POST',
         data: {dptName: null},
         success: function (data) {
             if (data) {
                 var result = JSON.parse(data).target;
+                if (!result)
+                    return;
                 $("select[name='resumeDpt']").html("");
                 for (var i = 0; i < result.length; i++) {
                     $("select[name='resumeDpt']").append('<option value="' + result[i].id + '">' + result[i].dptName + '</option>')

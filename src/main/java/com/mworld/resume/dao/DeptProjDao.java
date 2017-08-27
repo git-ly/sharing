@@ -11,11 +11,9 @@ public interface DeptProjDao {
 
     public Integer saveDpt(String dptName);
 
-    public Integer savePrj(Project project);
-
     public Integer saveDptPo(Department dpt);
 
-    public Integer savePrjPo(Project pro);
+    public Integer savePro(Project pro);
 
     public Integer saveDptPrj(@Param("dptId") Integer dptName, @Param("proId") Integer proId);
 
@@ -40,6 +38,8 @@ public interface DeptProjDao {
     public Integer saveDptAndPros(@Param("dptId") Integer dptId, @Param("list") List<Integer> list);
 
     public Integer saveProAndDpts(@Param("proId") Integer proId, @Param("list") List<Integer> list);
+
+    public List<Department> findDptsTotal();
 
     public List<Department> findDpts(@Param("dptName") String dptName, @Param("start") Integer start, @Param("size") Integer size);
 

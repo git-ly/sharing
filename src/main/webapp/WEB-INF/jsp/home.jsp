@@ -39,28 +39,60 @@
             height: 560px;
         }
 
-        .log_head div {
-            display: inline-block;
-        }
+        /*.log_head div {*/
+            /*display: inline-block;*/
+        /*}*/
 
-        .logo-div {
-            width: 120px;
-            margin-top: 5px;
-            margin-left: 20px;
-        }
+        /*.logo-div {*/
+            /*width: 120px;*/
+            /*margin-top: 5px;*/
+            /*margin-left: 20px;*/
+        /*}*/
 
-        .logout-div {
-            width: 200px;
-            text-align: right;
-        }
+        /*.logout-div {*/
+            /*width: 200px;*/
+            /*text-align: right;*/
+        /*}*/
 
-        .theme-div {
-            width: calc(100% - 400px);
+        /*.theme-div {*/
+            /*width: calc(100% - 400px);*/
+            /*text-align: center;*/
+            /*font-size: 42px;*/
+            /*font-family: 黑体;*/
+            /*line-height: 80px;*/
+            /*color: #8c8c8c;*/
+        /*}*/
+
+        #login-info{
+            /*display: inline-block;*/
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
             text-align: center;
-            font-size: 42px;
-            font-family: 黑体;
-            line-height: 80px;
-            color: #8c8c8c;
+        }
+
+        .login-btn-div div:hover{
+            background: #c0c0c0;
+        }
+
+        /*#login-info*/
+
+        #login-down{
+            top: 5px;
+        }
+        #login-down:hover{
+            color: brown;
+        }
+
+        .login-image{
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: url("<%=basePath%>css/images/logo/logo3.png") no-repeat;
+            background-size: 60px 60px;
+            border-radius: 30px;
         }
 
         .logo_browse {
@@ -114,19 +146,38 @@
 </head>
 <body>
 <div class="log_head">
-    <div class="logo-div">
-        <span class="logo logo_browse"></span></div>
-    <div class="theme-div">
-        <span>联龙博通简历管理系统</span>
+    <div class="logo-div col-lg-2">
+        <span class="logo logo_browse"></span>
     </div>
-    <div class="logout-div">
-        <a class="btn-group">
-            <button class="btn btn-primary reset-pwd-btn" type="button">修改密码</button>
-        </a>
-        <a class="btn-group" href="<%=basePath%>logout">
-            <button class="btn btn-danger" type="button">登出</button>
-        </a></div>
-</div>
+    <div class="theme-div col-lg-6 col-lg-offset-2">
+        <h2><strong>联龙博通简历管理系统</strong></h2>
+    </div>
+    <div class="logout-div col-lg-2 pull-right">
+        <div class="col-lg-6">
+            <span>欢迎光临</span>
+        </div>
+        <div class="col-lg-6">
+            <p><small class=" login-acct">管理员</small><span id="login-down" class="glyphicon glyphicon-chevron-down col-md-offset-2"></span></p>
+        </div>
+        <div class="panel panel-default col-lg-12" id="login-info">
+            <div class="panel-body">
+                <span class="col-lg-6"><strong>用户：</strong></span>
+                <span class="col-lg-6 login-acct"></span>
+            </div>
+            <div class="panel-body">
+                <span class="col-lg-6"><strong>职位：</strong></span>
+                <span class="col-lg-6 login-role"></span>
+            </div>
+            <div class="panel-body">
+                <span class="login-image"></span>
+            </div>
+            <div class="panel-body login-btn-div">
+                <div class="col-lg-6 btn" id="reset-pwd-btn">修改密码</div>
+                <div class="col-lg-6 btn" id="exit-btn">退出</div>
+            </div>
+        </div>
+    </div>
+ </div>
 
 <aside class="col-md-2 menu-aside">
     <ul class="nav nav-pills nav-stacked menu"></ul>
@@ -155,7 +206,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Notice</h4>
             </div>
-            <div class="modal-text">text</div>
+            <div class="modal-body">text</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" id="sure-btn">提交更改</button>

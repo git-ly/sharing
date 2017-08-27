@@ -18,16 +18,11 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Autowired
     private DeptProjDao deptProjDao;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Integer saveDpt(String dptName) {
         return deptProjDao.saveDpt(dptName);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Integer savePrj(Project project) {
-        return deptProjDao.savePrj(project);
     }
 
     @Override
@@ -38,14 +33,31 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer savePrjPo(Project pro) {
-        return deptProjDao.savePrjPo(pro);
+    public Integer savePro(Project pro) {
+        return deptProjDao.savePro(pro);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer saveDptPrj(Integer dptId, Integer proId) {
+    public Integer saveDptPrjMid(Integer dptId, Integer proId) {
         return deptProjDao.saveDptPrj(dptId, proId);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer saveDptPrjMid(Integer dptId, String proName) {
+        Integer proId = deptProjDao.findProIdByName(proName);
+        if (proId != null && proId > 0) {
+
+            return deptProjDao.saveDptPrj(dptId, proId);
+
+        } else {
+            Project project = new Project(proName);
+            Integer cnt = deptProjDao.savePro(project);
+            if (cnt != null && cnt > 0)
+                return deptProjDao.saveDptPrj(dptId, project.getId());
+            return null;
+        }
     }
 
     @Override
@@ -99,6 +111,11 @@ public class DeptProjServiceImpl implements DeptProjService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Integer saveProAndDpts(Integer proId, List<Integer> list) {
         return deptProjDao.saveProAndDpts(proId, list);
+    }
+
+    @Override
+    public List<Department> findDptsTotal() {
+        return deptProjDao.findDptsTotal();
     }
 
     @Override

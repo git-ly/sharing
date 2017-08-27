@@ -51,6 +51,15 @@ public class DeptProjController extends BaseController {
                 response.setContentType("text/html;charset=UTF-8");
                 responseMsg(response, new Message<>(new ResponseVo<>(dpts, count), true, NoticeConst.GET_DATA_NOTICE));
                 break;
+            case "dpsTotal":
+                List<Department> dptsTotal = deptProjService.findDptsTotal();
+                if (CollectionUtils.isEmpty(dptsTotal)) {
+                    responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
+                    return;
+                }
+                response.setContentType("text/html;charset=UTF-8");
+                responseMsg(response, new Message<>(dptsTotal, true, NoticeConst.GET_DATA_NOTICE));
+                break;
             case "proOfDpt":
                 String dptId = request.getParameter("ctrId");
                 if (StringUtils.isEmpty(dptId)) {
@@ -141,21 +150,17 @@ public class DeptProjController extends BaseController {
                 break;
             case "pro":
                 String dptId = request.getParameter("ctrId");
-                if (StringUtils.isEmpty(saveTag)) {
+                if (StringUtils.isEmpty(dptId)) {
                     responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
                     return;
                 }
-                Project project = new Project(saveTag);
-                saveCnt = deptProjService.savePrj(project);
-
-
-                //TODO---------------------------------------------------------------------------
+                saveCnt = deptProjService.saveDptPrjMid(Integer.valueOf(dptId.trim()), saveTag);
                 break;
             default:
                 responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
                 return;
         }
-        if (saveCnt > 0) {
+        if (saveCnt != null && saveCnt > 0) {
             responseMsg(response, new Message(true, NoticeConst.DATA_SAVE_SUCCESS));
             return;
         }

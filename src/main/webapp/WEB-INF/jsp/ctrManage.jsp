@@ -115,7 +115,7 @@
             right: 5px;
         }
 
-        strong .badge{
+        strong .badge {
             position: relative;
             bottom: 4px;
         }
@@ -193,6 +193,82 @@
         </div>
     </div>
 </div>
+<div class="modal fade" role="dialog" tabindex="-1" id="wkAddMod">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">选择人员</h4>
+            </div>
+            <div class="modal-body">
+                <div class="resume-find">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control keyword-input"
+                               placeholder="姓名、学历、专业、人员属地、项目名称、项目属地">
+                <span class="input-group-addon resume-search-btn">
+                    <span class="glyphicon glyphicon-search"></span>
+                </span>
+                    </div>
+                </div>
+                <div class="worker-list">
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span class="roadmap-ico"></span>
+                        <span class="roadmap-title">王麻子</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 <script type="text/javascript" src="<%=basePath%>js/jqPaginator.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/ctrMange.js"></script>
