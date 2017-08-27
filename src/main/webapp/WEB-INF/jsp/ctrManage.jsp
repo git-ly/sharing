@@ -115,13 +115,18 @@
             right: 5px;
         }
 
+        strong .badge{
+            position: relative;
+            bottom: 4px;
+        }
+
     </style>
 </head>
 <body>
 <div class="panel panel-default tar-center" id="ctr-center">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <strong>中心</strong>
+            <strong>中心<span class="badge"></span></strong>
             <span class="pull-right glyphicon glyphicon-plus"></span>
             <span class="pull-right glyphicon glyphicon-search"></span>
         </h3>
@@ -135,7 +140,7 @@
 <div class="panel panel-default tar-center" id="pro-center">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <strong>项目</strong>
+            <strong>项目<span class="badge"></span></strong>
             <span class="process"></span>
             <span class="pull-right glyphicon glyphicon-plus"></span>
             <span class="pull-right glyphicon glyphicon-search"></span>
@@ -150,7 +155,7 @@
 <div class="panel panel-default tar-center" id="worker-center">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <strong>人员</strong>
+            <strong>人员<span class="badge"></span></strong>
             <span class="process"></span><span class="process"></span>
             <span class="pull-right glyphicon glyphicon-plus"></span>
             <span class="pull-right glyphicon glyphicon-search"></span>

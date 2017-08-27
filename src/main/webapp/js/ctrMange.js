@@ -137,6 +137,7 @@ var ctrFn = {
                             activeClass: 'active',
                             onPageChange: function (n) {
                                 ctrFn.initCtrList(n, this.pageSize)
+                                $("#ctr-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
                             }
                         });
                         ctrFn.ctrPage.flag = false;
@@ -149,8 +150,8 @@ var ctrFn = {
                             $("#worker-center .process:eq(1)").text("");
                             $("#pro-center .panel-body").html("请选择中心");
                             $("#worker-center .panel-body").text("未选择项目");
-                            $("#pro-center .pro-box").html("");
-                            $("#worker-center .res-box").html("");
+                            $("#pro-center .pro-box, #worker-center .res-box").html("");
+                            $("#pro-center, #worker-center").find(".panel-heading").find("strong").find(".badge").text("0/0");
                             ctrFn.proPage.flag = true;
                             ctrFn.resPage.flag = true;
                             ctrFn.findPrt($(this).attr("ctrId"));
@@ -202,7 +203,8 @@ var ctrFn = {
                             disableClass: 'disabled',
                             activeClass: 'active',
                             onPageChange: function (n) {
-                                ctrFn.findPrt(id, n, this.pageSize)
+                                ctrFn.findPrt(id, n, this.pageSize);
+                                $("#pro-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
                             }
                         });
                         ctrFn.proPage.flag = false;
@@ -212,6 +214,7 @@ var ctrFn = {
                         $("#worker-center .process:eq(1)").text(">>" + $(this).attr("iProName"));
                         $("#worker-center .panel-body").html("请选择项目");
                         $("#worker-center .res-box").html("");
+                        $("#worker-center").find(".panel-heading").find("strong").find(".badge").text("0/0");
                         ctrFn.resPage.flag = true;
                         ctrFn.findWorker($(this).attr("pCtrId"), $(this).attr("iProId"));
                     });
@@ -260,7 +263,8 @@ var ctrFn = {
                             disableClass: 'disabled',
                             activeClass: 'active',
                             onPageChange: function (n) {
-                                ctrFn.findWorker(ctrId, proId, n, this.pageSize)
+                                ctrFn.findWorker(ctrId, proId, n, this.pageSize);
+                                $("#worker-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
                             }
                         });
                         ctrFn.resPage.flag = false;
