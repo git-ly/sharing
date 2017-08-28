@@ -1,5 +1,6 @@
 var ctrFn = {
     optCtr: '',
+    optPro: '',
     ctrPage: {flag: true, cnt: 0},
     proPage: {flag: true, cnt: 0},
     resPage: {flag: true, cnt: 0},
@@ -10,7 +11,9 @@ var ctrFn = {
         dptCheck: host + 'organize/dpt/checkExist',
         proCheck: host + 'organize/pro/checkExist',
         dptAdd: host + 'organize/dpt/add',
-        proAdd: host + 'organize/pro/add'
+        proAdd: host + 'organize/pro/add',
+        getResumes: host + '',
+        resumeAdd: host + ''
     },
     initMsgBox: function (init) {
         var $modal = init && init.modelId ? $("#" + init.modelId) : $("#alertModal");
@@ -228,6 +231,7 @@ var ctrFn = {
                         $("#worker-center").find(".panel-heading").find("strong").find(".badge").text("0/0");
                         ctrFn.resPage.flag = true;
                         ctrFn.findWorker($(this).attr("pCtrId"), $(this).attr("iProId"));
+                        ctrFn.optPro = $(this).attr("iProId");
                     });
                 } else {
                     $("#pro-center .panel-body").text("未查询到数据");
@@ -325,8 +329,50 @@ $(function () {
     }, true);
 
     $("#worker-center .panel-title .glyphicon-plus").unbind().bind("click", function () {
-        tip.tipMod({
-            mod : 'wkAddMod'
+        if (!ctrFn.optCtr || !ctrFn.optPro) {
+            tip.tipBox({type: 'warn', text: "请先选择中心和项目，再进行操作"});
+            return;
+        }
+
+        tip.tipMod({mod: 'wkAddMod',}, function () {
+            $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
+            $.ajax({
+                url: ctrFn.url.getResumes,
+                type: 'POST',
+                data: {
+                    start: 0,
+                    size: 20,
+                    ctrId: ctrFn.optCtr,
+                    proId: ctrFn.optPro
+                },
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    if (result && result.success) {
+                        $("#wkAddMod").html("");
+                        if (result.target && result.target.data && result.target.data.length > 0) {
+                            for (var i = 0; i < result.target.data.length; i++) {
+                                $("#wkAddMod").append('<div class="roadmap-item">\n' +
+                                    '                        <span class="roadmap-ico"></span>\n' +
+                                    '                        <span class="roadmap-title">王麻子</span>\n' +
+                                    '                    </div>')
+                            }
+                        } else {
+                            tip.tipMod({mod: 'wkAddMod',}, function () {
+                                $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
+                            })
+                        }
+                    } else {
+                        tip.tipMod({mod: 'wkAddMod',}, function () {
+                            $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
+                        })
+                    }
+                },
+                error: function () {
+                    $("#wkAddMod").modal('hide');
+                    tip.tipBox({type: 'err', title: '错误', text: "服务器故障！"}, true)
+                }
+            })
         })
+
     })
 })

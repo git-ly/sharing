@@ -15,8 +15,26 @@ public class ResumeMapVo extends Resume {
 //    public void setDps(List<DepartProjectVo> dps) {
 //        this.dps = dps;
 //    }
+    private Integer dptId;
+    private Integer proId;
     private String dptName;
     private String proName;
+
+    public Integer getDptId() {
+        return dptId;
+    }
+
+    public void setDptId(Integer dptId) {
+        this.dptId = dptId;
+    }
+
+    public Integer getProId() {
+        return proId;
+    }
+
+    public void setProId(Integer proId) {
+        this.proId = proId;
+    }
 
     public String getDptName() {
         return dptName;

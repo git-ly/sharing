@@ -180,4 +180,24 @@
             </if>
         </where>
     </select>
+
+    <select id="findAllowResumes" parameterType="com.mworld.resume.vo.ResumeRequestVo" resultType="Resume">
+        select
+        r.id,
+        r.owner,
+        r.major,
+        r.education,
+        from resume r
+        where not exists(
+        select 1 from dpt_prj_res_mid dp
+        left join dpt_prj_mid m on dp.dpt_prj_id=m.id
+        where dp.res_id=r.id and m.dpt_id=#{options.dptId} and m.prj_id=#{options.proId})
+        <if test="options.keyword != null and options.keyword !=''">
+            AND r.owner LIKE concat('%', concat(#{keyword},'%'))
+            OR r.education LIKE concat('%', concat(#{keyword},'%'))
+            OR r.major LIKE concat('%', concat(#{keyword},'%'))
+        </if>
+        order by r.upload_time DESC,r.owner
+        limit #{start},#{size}
+    </select>
 </mapper>

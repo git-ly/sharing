@@ -174,6 +174,12 @@ public class ResumeController extends BaseController {
             responseMsg(response, new Message<>(true, "js/swf/test2.swf"));
     }
 
+    @RequestMapping(value = "findResums/{start}/{size}", method = RequestMethod.POST)
+    public void findResumes(HttpServletRequest request, HttpServletResponse response,
+                            @PathVariable("start") int start, @PathVariable("size") int size){
+
+    }
+
 
 }
 
