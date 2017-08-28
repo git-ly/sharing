@@ -22,5 +22,7 @@ public interface UserService {
 
     public boolean updatePwdById(String newPwd, String id, Integer srcRole);
 
+    public Integer updatePwd(String id, String oldPwd, String newPwd);
+
     public boolean updateUserRole( Integer newRole, String id, Integer tagRole);
 }
