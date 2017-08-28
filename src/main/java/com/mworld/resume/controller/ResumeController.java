@@ -177,7 +177,13 @@ public class ResumeController extends BaseController {
     @RequestMapping(value = "findResums/{start}/{size}", method = RequestMethod.POST)
     public void findResumes(HttpServletRequest request, HttpServletResponse response,
                             @PathVariable("start") int start, @PathVariable("size") int size){
+        String keyword = request.getParameter("keyword");
+        String dptId = request.getParameter("ctrId");
+        String proId = request.getParameter("proId");
+        ResumeMapVo options = new ResumeMapVo();
+//        options.setDptId();
 
+        //TODO -------------------------------------------------
     }
 
 

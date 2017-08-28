@@ -25,5 +25,5 @@ public interface ResumeService {
 
     public List<Resume> findAllowResumes(ResumeMapVo options, Integer start, Integer size);
 
-
+    public Integer findAllowResumesCnt(ResumeMapVo options);
 }
