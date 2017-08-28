@@ -204,61 +204,13 @@
                 <div class="resume-find">
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control keyword-input"
-                               placeholder="姓名、学历、专业、人员属地、项目名称、项目属地">
+                               placeholder="姓名、学历、专业、人员属地">
                 <span class="input-group-addon resume-search-btn">
                     <span class="glyphicon glyphicon-search"></span>
                 </span>
                     </div>
                 </div>
                 <div class="worker-list">
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
-                    <div class="roadmap-item">
-                        <span class="roadmap-ico"></span>
-                        <span class="roadmap-title">王麻子</span>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">

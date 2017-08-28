@@ -12,7 +12,7 @@ var ctrFn = {
         proCheck: host + 'organize/pro/checkExist',
         dptAdd: host + 'organize/dpt/add',
         proAdd: host + 'organize/pro/add',
-        getResumes: host + '',
+        getResumes: host + 'resume/findResums',
         resumeAdd: host + ''
     },
     initMsgBox: function (init) {
@@ -348,12 +348,12 @@ $(function () {
                 success: function (data) {
                     var result = JSON.parse(data);
                     if (result && result.success) {
-                        $("#wkAddMod").html("");
+                        $("#wkAddMod").find(".worker-list").html("");
                         if (result.target && result.target.data && result.target.data.length > 0) {
                             for (var i = 0; i < result.target.data.length; i++) {
-                                $("#wkAddMod").append('<div class="roadmap-item">\n' +
+                                $("#wkAddMod").find(".worker-list").append('<div class="roadmap-item">\n' +
                                     '                        <span class="roadmap-ico"></span>\n' +
-                                    '                        <span class="roadmap-title">王麻子</span>\n' +
+                                    '                        <span class="roadmap-title">' + result.target.data[i].owner + '</span>\n' +
                                     '                    </div>')
                             }
                         } else {

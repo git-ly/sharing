@@ -19,6 +19,7 @@ public class ResumeMapVo extends Resume {
     private Integer proId;
     private String dptName;
     private String proName;
+    private String keyword;
 
     public Integer getDptId() {
         return dptId;
@@ -52,4 +53,11 @@ public class ResumeMapVo extends Resume {
         this.proName = proName;
     }
 
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 }

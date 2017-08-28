@@ -116,7 +116,7 @@ public class ResumeController extends BaseController {
             List<ResumeMapVo> list = resumeService.findResumeDetail(options, start, size);
             if (!CollectionUtils.isEmpty(list)) {
                 response.setContentType("text/html;charset=UTF-8");
-                responseMsg(response, new Message(new ResponseVo<>(list, t), true, NoticeConst.NO_DATA_NOTICE));
+                responseMsg(response, new Message(new ResponseVo<>(list, t), true, NoticeConst.GET_DATA_NOTICE));
                 return;
             }
 
@@ -165,7 +165,7 @@ public class ResumeController extends BaseController {
 //    }
     @RequestMapping(value = "/previewDoc", method = RequestMethod.GET)
     public void previewDoc(HttpServletRequest request, HttpServletResponse response) {
-        String output = this.getClass().getClassLoader().getResource("/").getPath().replace("WEB-INF/classes/","js/swf");
+        String output = this.getClass().getClassLoader().getResource("/").getPath().replace("WEB-INF/classes/", "js/swf");
         logger.info(output + "-------------------");
         DocConverter docConverter = new DocConverter("D:/test2.doc");
         docConverter.setOutPath(output);
@@ -174,16 +174,33 @@ public class ResumeController extends BaseController {
             responseMsg(response, new Message<>(true, "js/swf/test2.swf"));
     }
 
-    @RequestMapping(value = "findResums/{start}/{size}", method = RequestMethod.POST)
-    public void findResumes(HttpServletRequest request, HttpServletResponse response,
-                            @PathVariable("start") int start, @PathVariable("size") int size){
+    @RequestMapping(value = "findResums", method = RequestMethod.POST)
+    public void findResumes(HttpServletRequest request, HttpServletResponse response) {
         String keyword = request.getParameter("keyword");
         String dptId = request.getParameter("ctrId");
         String proId = request.getParameter("proId");
+        Integer start = StringUtils.isEmpty(request.getParameter("start")) ? 1 : Integer.valueOf(request.getParameter("start"));
+        Integer size = StringUtils.isEmpty(request.getParameter("start")) ? 20 : Integer.valueOf(request.getParameter("size"));
         ResumeMapVo options = new ResumeMapVo();
-//        options.setDptId();
+        if (!StringUtils.isEmpty(dptId))
+            options.setDptId(Integer.valueOf(dptId.trim()));
+        if (!StringUtils.isEmpty(proId))
+            options.setProId(Integer.valueOf(proId));
+        if (!StringUtils.isEmpty(keyword))
+            options.setKeyword(keyword);
+        Integer cnt = resumeService.findAllowResumesCnt(options);
+        if (cnt == null || cnt <= 0) {
+            responseMsg(response, new Message(false, NoticeConst.NO_DATA_NOTICE));
+            return;
+        }
 
-        //TODO -------------------------------------------------
+        List<Resume> list = resumeService.findAllowResumes(options, start, size);
+        if (CollectionUtils.isEmpty(list)) {
+            responseMsg(response, new Message(false, NoticeConst.NO_DATA_NOTICE));
+            return;
+        }
+        response.setContentType("text/html;charset=UTF-8");
+        responseMsg(response, new Message(new ResponseVo<>(list, cnt), true, NoticeConst.GET_DATA_NOTICE));
     }
 
 
