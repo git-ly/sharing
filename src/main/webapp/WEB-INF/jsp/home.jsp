@@ -103,6 +103,13 @@
             background-size: 60px 60px;
         }
 
+        .logo_browse.trans{
+            background: url("<%=basePath%>css/images/logo/logo1.png") no-repeat;
+            background-size: 60px 60px;
+            width: 60px;
+            height: 60px;
+        }
+
         /*.log_head div{*/
         /*border: 1px solid black;*/
         /*}*/
@@ -147,7 +154,7 @@
 <body>
 <div class="log_head">
     <div class="logo-div col-lg-2">
-        <span class="logo logo_browse"></span>
+        <span class="logo logo_browse trans"></span>
     </div>
     <div class="theme-div col-lg-6 col-lg-offset-2">
         <h2><strong>联龙博通简历管理系统</strong></h2>
