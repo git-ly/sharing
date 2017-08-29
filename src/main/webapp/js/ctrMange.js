@@ -146,14 +146,12 @@ var ctrFn = {
     },
     initProSpace: function () {
         $("#pro-center").find(".panel-heading").find("strong").find(".badge").text('0/0');
-        $("#pro-center .process").text();
         $("#worker-center .panel-body").text("请选择中心");
         ctrFn.proPage.flag = true;
         $(".pro-box").html('');
     },
     initWorkerSpace: function () {
         $("#worker-center").find(".panel-heading").find("strong").find(".badge").text('0/0');
-        $("#worker-center .process").text('');
         $("#worker-center .panel-body").text("未选择项目");
         ctrFn.resPage.flag = true;
         ctrFn.resArray = [];
@@ -310,12 +308,14 @@ var ctrFn = {
                 if (!ctrFn.opt.ctrId) {
                     tip.tipBox({type: 'warn', text: '请选择中心后再操作！'}, true)
                 }
+                ctrFn.initProSpace();
                 ctrFn.findPrt(ctrFn.opt.ctrId);
                 break;
             case "人员":
                 if (!ctrFn.opt.ctrId || !ctrFn.opt.proId) {
                     tip.tipBox({type: 'warn', text: '请选择中心和项目后再操作！'}, true)
                 }
+                ctrFn.initWorkerSpace();
                 ctrFn.findWorker(ctrFn.opt.ctrId, ctrFn.opt.proId);
                 break;
         }
