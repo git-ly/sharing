@@ -81,8 +81,8 @@
 
     <insert id="saveProAndDpts" parameterType="java.util.List">
       INSERT INTO dpt_prj_mid(dpt_id,prj_id) VALUES
-      <foreach collection="list" item="dpt" open="(" close=")" separator=",">
-          #{dpt},#{proId}
+      <foreach collection="list" item="dpt" separator=",">
+          (#{dpt},#{proId})
       </foreach>
     </insert>
 
@@ -135,5 +135,16 @@
         ON m.dpt_prj_id=dp.id
         WHERE dp.dpt_id=#{ctrId}
         AND dp.prj_id=#{proId}
+    </select>
+    
+    <insert id="saveResProShip" parameterType="map">
+        insert into dpt_prj_res_mid VALUES 
+        <foreach collection="resumes" item="it" separator=",">
+            (#{dptPrjId},#{it})
+        </foreach>
+    </insert>
+
+    <select id="findDptPrjId" resultType="int">
+        SELECT id from dpt_prj_mid where dpt_id=#{dptId} and prj_id=#{proId}
     </select>
 </mapper>

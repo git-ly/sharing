@@ -20,7 +20,7 @@ public interface ResumeDao {
 
     public Integer findResumeDetailCnt(@Param("options") ResumeRequestVo options);
 
-    public List<Resume> findAllowResumes(@Param("options") ResumeMapVo options, @Param("start") Integer start, @Param("size") Integer size);
+    public List<ResumeMapVo> findAllowResumes(@Param("options") ResumeMapVo options, @Param("start") Integer start, @Param("size") Integer size);
 
     public Integer findAllowResumesCnt(@Param("options") ResumeMapVo options);
 }

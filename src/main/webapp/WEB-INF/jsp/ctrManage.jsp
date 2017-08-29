@@ -83,7 +83,7 @@
             position: relative;
         }
 
-        .prev, .next {
+        .tar-center .prev, .tar-center .next {
             list-style: none;
             position: absolute;
             bottom: 30px;
@@ -103,21 +103,54 @@
             display: inline-block;
         }
 
-        .prev:hover, .next:hover {
+        .tar-center .prev:hover, .tar-center .next:hover {
             background: rgba(33, 33, 33, 0.5);
         }
 
-        .prev {
+        .tar-center .prev {
             left: 5px;
         }
 
-        .next {
+        .tar-center .next {
             right: 5px;
         }
 
         strong .badge {
             position: relative;
             bottom: 4px;
+        }
+
+        .worker-list-item{
+            display: inline-block;
+            width: calc(25% - 12px);
+            margin: 5px;
+            padding: 5px;
+            border: 1px solid rgba(7, 8, 8, 0.18);
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+        }
+        .worker-list-item p span:first-child{
+            margin-left: 5px;
+        }
+        .worker-list-item p span:last-child{
+            display: inline-block;
+            width: calc(100% - 20px);
+            text-align: center;
+            padding-left: 3px;
+            overflow: hidden;
+        }
+
+        .worker-list-item:hover{
+            border: 1px solid cadetblue;
+        }
+        .worker-list-item.select{
+            border: 1px solid cadetblue;
+            background: rgba(53, 157, 160, 0.39);
+        }
+        .box.worker-page-box{
+            position: relative;
+            left: calc(100% - 300px);
         }
 
     </style>
@@ -212,6 +245,7 @@
                 </div>
                 <div class="worker-list">
                 </div>
+                <div class="box worker-page-box"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

@@ -155,4 +155,19 @@ public class DeptProjServiceImpl implements DeptProjService {
     public Integer findResumeOfProCnt(Integer ctrId, Integer proId) {
         return deptProjDao.findResumeOfProCnt(ctrId, proId);
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer saveResProShip(Integer dptId, Integer proId, String[] resumes) {
+        Integer dpPrId = deptProjDao.findDptPrjId(dptId, proId);
+        if (dpPrId == null || dpPrId <=0)
+            return null;
+        return  deptProjDao.saveResProShip(dpPrId, resumes);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Integer findDptPrjId(Integer dptId, Integer proId) {
+        return deptProjDao.findDptPrjId(dptId, proId);
+    }
 }

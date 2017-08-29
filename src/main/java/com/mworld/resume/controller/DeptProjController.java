@@ -1,17 +1,18 @@
 package com.mworld.resume.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.mworld.common.*;
 import com.mworld.resume.po.Department;
 import com.mworld.resume.po.Project;
 import com.mworld.resume.po.Resume;
 import com.mworld.resume.service.DeptProjService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/organize")
 public class DeptProjController extends BaseController {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private DeptProjService deptProjService;
@@ -220,5 +222,23 @@ public class DeptProjController extends BaseController {
 //            proId = pro.getId();
 //        }
 
+    }
+
+    @RequestMapping(value = "createShip", method = RequestMethod.POST)
+    @ResponseBody
+    public void createShip(HttpServletRequest request, HttpServletResponse response){
+        Integer dptId = StringUtils.isEmpty(request.getParameter("ctrId")) ? null : Integer.valueOf(request.getParameter("ctrId").trim());
+        Integer proId = StringUtils.isEmpty(request.getParameter("proId")) ? null : Integer.valueOf(request.getParameter("proId").trim());
+        String[] resumes = StringUtils.isEmpty(request.getParameter("workers")) ? null : request.getParameter("workers").split(",");
+        if (dptId == null || proId == null || resumes == null){
+            responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
+            return;
+        }
+        Integer cnt = deptProjService.saveResProShip(dptId, proId, resumes);
+        if (cnt == null || cnt <=0){
+            responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
+            return;
+        }
+        responseMsg(response, new Message(true, NoticeConst.DATA_SAVE_SUCCESS));
     }
 }

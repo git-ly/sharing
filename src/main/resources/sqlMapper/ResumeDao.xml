@@ -181,13 +181,15 @@
         </where>
     </select>
 
-    <select id="findAllowResumes" parameterType="com.mworld.resume.vo.ResumeRequestVo" resultType="Resume">
+    <select id="findAllowResumes" parameterType="com.mworld.resume.vo.ResumeRequestVo" resultType="com.mworld.resume.vo.ResumeMapVo">
         select
         r.id,
         r.owner,
         r.major,
-        r.education
+        r.education,
+        d.dpt_name `dptName`
         from resume r
+        left join department d on d.id=r.dpt_id
         where not exists(
         select 1 from dpt_prj_res_mid dp
         left join dpt_prj_mid m on dp.dpt_prj_id=m.id
@@ -196,6 +198,7 @@
             AND r.owner LIKE concat('%', concat(#{options.keyword},'%'))
             OR r.education LIKE concat('%', concat(#{options.keyword},'%'))
             OR r.major LIKE concat('%', concat(#{options.keyword},'%'))
+            OR d.dpt_name LIKE concat('%', concat(#{options.keyword},'%'))
         </if>
         order by r.upload_time DESC,r.owner
         limit #{start},#{size}
@@ -205,6 +208,7 @@
         select
         count(1)
         from resume r
+        left join department d on d.id=r.dpt_id
         where not exists(
         select 1 from dpt_prj_res_mid dp
         left join dpt_prj_mid m on dp.dpt_prj_id=m.id
@@ -213,6 +217,7 @@
             AND r.owner LIKE concat('%', concat(#{options.keyword},'%'))
             OR r.education LIKE concat('%', concat(#{options.keyword},'%'))
             OR r.major LIKE concat('%', concat(#{options.keyword},'%'))
+            OR d.dpt_name LIKE concat('%', concat(#{options.keyword},'%'))
         </if>
     </select>
 </mapper>

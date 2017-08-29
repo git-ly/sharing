@@ -61,7 +61,7 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<Resume> findAllowResumes(ResumeMapVo options, Integer start, Integer size) {
+    public List<ResumeMapVo> findAllowResumes(ResumeMapVo options, Integer start, Integer size) {
         PageUtil pageUtil = new PageUtil(start, size);
         return resumeDao.findAllowResumes(options, pageUtil.getStart(), pageUtil.getSize());
     }

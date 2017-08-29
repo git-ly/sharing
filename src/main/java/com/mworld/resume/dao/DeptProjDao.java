@@ -48,4 +48,8 @@ public interface DeptProjDao {
     public List<Resume> findResumeOfPro(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId, @Param("start") Integer start, @Param("size") Integer size);
 
     public Integer findResumeOfProCnt(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId);
+
+    public Integer saveResProShip(@Param("dptPrjId") Integer dptPrjId, @Param("resumes") String[] resumes);
+
+    public Integer findDptPrjId(@Param("dptId") Integer dptId, @Param("proId") Integer proId);
 }

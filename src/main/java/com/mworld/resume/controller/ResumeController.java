@@ -180,7 +180,7 @@ public class ResumeController extends BaseController {
         String dptId = request.getParameter("ctrId");
         String proId = request.getParameter("proId");
         Integer start = StringUtils.isEmpty(request.getParameter("start")) ? 1 : Integer.valueOf(request.getParameter("start"));
-        Integer size = StringUtils.isEmpty(request.getParameter("start")) ? 20 : Integer.valueOf(request.getParameter("size"));
+        Integer size = StringUtils.isEmpty(request.getParameter("size")) ? 12 : Integer.valueOf(request.getParameter("size"));
         ResumeMapVo options = new ResumeMapVo();
         if (!StringUtils.isEmpty(dptId))
             options.setDptId(Integer.valueOf(dptId.trim()));
@@ -194,7 +194,7 @@ public class ResumeController extends BaseController {
             return;
         }
 
-        List<Resume> list = resumeService.findAllowResumes(options, start, size);
+        List<ResumeMapVo> list = resumeService.findAllowResumes(options, start, size);
         if (CollectionUtils.isEmpty(list)) {
             responseMsg(response, new Message(false, NoticeConst.NO_DATA_NOTICE));
             return;

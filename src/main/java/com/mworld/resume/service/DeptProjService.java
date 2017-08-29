@@ -49,4 +49,8 @@ public interface DeptProjService {
     public List<Resume> findResumeOfPro(Integer ctrId, Integer proId, Integer start, Integer size);
 
     public Integer findResumeOfProCnt(Integer ctrId, Integer proId);
+
+    public Integer saveResProShip(Integer dptId, Integer proId, String[] resumes);
+
+    public Integer findDptPrjId(Integer dptId, Integer proId);
 }

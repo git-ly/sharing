@@ -3,7 +3,8 @@ var ctrFn = {
     optPro: '',
     ctrPage: {flag: true, cnt: 0},
     proPage: {flag: true, cnt: 0},
-    resPage: {flag: true, cnt: 0},
+    resPage: {flag: true, cnt: 0, cellFlag: true, cellCnt: 0},
+    resArray: [],
     url: {
         dptList: host + "organize/dpt/searchList",
         proList: host + "organize/proOfDpt/searchList",
@@ -13,7 +14,7 @@ var ctrFn = {
         dptAdd: host + 'organize/dpt/add',
         proAdd: host + 'organize/pro/add',
         getResumes: host + 'resume/findResums',
-        resumeAdd: host + ''
+        resumeAdd: host + 'organize/createShip'
     },
     initMsgBox: function (init) {
         var $modal = init && init.modelId ? $("#" + init.modelId) : $("#alertModal");
@@ -289,6 +290,116 @@ var ctrFn = {
                 }
             }
         })
+    },
+    addWorker: function (start, size) {
+        start = start ? start : 1;
+        size = size ? size : 12;
+        tip.tipMod({mod: 'wkAddMod',}, function () {
+            $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
+            $.ajax({
+                url: ctrFn.url.getResumes,
+                type: 'POST',
+                data: {
+                    start: start,
+                    size: size,
+                    keyword :$("#wkAddMod").find(".keyword-input").val(),
+                    ctrId: ctrFn.optCtr,
+                    proId: ctrFn.optPro
+                },
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    if (result && result.success) {
+                        $("#wkAddMod").find(".worker-list").html("");
+                        if (result.target && result.target.data && result.target.data.length > 0) {
+                            ctrFn.resPage.cellCnt = result.target.counts;
+                            console.info(ctrFn.resPage.cellCnt);
+                            for (var i = 0; i < result.target.data.length; i++) {
+
+                                $("#wkAddMod").find(".worker-list").append('<div class="worker-list-item" wkId="' + result.target.data[i].id + '">\n' +
+                                    '                        <p><span class="glyphicon glyphicon-user"></span><span>' + result.target.data[i].owner + '</span></p>\n' +
+                                    '                        <p><span class="glyphicon glyphicon-magnet"></span><span>' + result.target.data[i].education + '</span></p>\n' +
+                                    '                        <p><span class="glyphicon glyphicon-tower"></span><span>' + result.target.data[i].major + '</span></p>\n' +
+                                    '                    </div>')
+                            }
+
+                            if (ctrFn.resArray && ctrFn.resArray.length > 0) {
+                                for (var j = 0; j < ctrFn.resArray.length; j++) {
+                                    $(".worker-list").find("[wkId='" + ctrFn.resArray[j] + "']").addClass("select");
+                                }
+                            }
+
+                            while (ctrFn.resPage.cellFlag) {
+                                $(".worker-page-box").jqPaginator({
+                                    first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
+                                    prev: '<li class="prev"><a href="javascript:void(0);">上一页</a></li>',
+                                    next: '<li class="next"><a href="javascript:void(0);">下一页</a></li>',
+                                    last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
+                                    page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+                                    // totalPages: 5,
+                                    totalCounts: ctrFn.resPage.cellCnt,
+                                    pageSize: 12,
+                                    currentPage: 1,
+                                    visiblePages: 3,
+                                    disableClass: 'disabled',
+                                    activeClass: 'active',
+                                    onPageChange: function (n) {
+                                        ctrFn.addWorker(n, this.pageSize)
+                                    }
+                                });
+                                ctrFn.resPage.cellFlag = false;
+                            }
+                        } else {
+                            tip.tipMod({mod: 'wkAddMod',}, function () {
+                                $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
+                            })
+                        }
+                    } else {
+                        tip.tipMod({mod: 'wkAddMod',}, function () {
+                            $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
+                        })
+                    }
+                    $(".worker-list-item").unbind().bind("click", function () {
+                        if ($(this).hasClass("select")) {
+                            $(this).removeClass("select");
+                            ctrFn.resArray.splice(ctrFn.resArray.indexOf($(this).attr("wkId")), 1);
+                        } else {
+                            $(this).addClass("select");
+                            ctrFn.resArray.push($(this).attr("wkId"))
+                        }
+                    });
+                    $("#wkAddMod .modal-footer button:eq(1)").unbind().bind("click", function () {
+                        $.ajax({
+                            url: ctrFn.url.resumeAdd,
+                            type: 'post',
+                            data: {
+                                ctrId: ctrFn.optCtr,
+                                proId: ctrFn.optPro,
+                                workers: ctrFn.resArray.toString()
+                            },
+                            success: function (data) {
+                                var result = JSON.parse(data);
+                                if (result && result.success) {
+                                    tip.tipBox({text: "添加成功，请刷新后查看"}, true);
+                                    $("#wkAddMod").modal('hide');
+                                } else {
+                                    tip.tipBox({text: "添加失败"}, true);
+                                    $("#wkAddMod").modal('hide');
+                                }
+                            },
+                            error: function () {
+                                tip.tipBox({type: 'err', text: "添加失败，服务器故障"}, true);
+                                $("#wkAddMod").modal('hide');
+                            }
+                        })
+                    });
+                },
+                error: function () {
+                    $("#wkAddMod").modal('hide');
+                    tip.tipBox({type: 'err', title: '错误', text: "服务器故障！"}, true)
+                }
+            })
+        })
+
     }
 }
 
@@ -333,46 +444,17 @@ $(function () {
             tip.tipBox({type: 'warn', text: "请先选择中心和项目，再进行操作"});
             return;
         }
-
-        tip.tipMod({mod: 'wkAddMod',}, function () {
-            $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
-            $.ajax({
-                url: ctrFn.url.getResumes,
-                type: 'POST',
-                data: {
-                    start: 0,
-                    size: 20,
-                    ctrId: ctrFn.optCtr,
-                    proId: ctrFn.optPro
-                },
-                success: function (data) {
-                    var result = JSON.parse(data);
-                    if (result && result.success) {
-                        $("#wkAddMod").find(".worker-list").html("");
-                        if (result.target && result.target.data && result.target.data.length > 0) {
-                            for (var i = 0; i < result.target.data.length; i++) {
-                                $("#wkAddMod").find(".worker-list").append('<div class="roadmap-item">\n' +
-                                    '                        <span class="roadmap-ico"></span>\n' +
-                                    '                        <span class="roadmap-title">' + result.target.data[i].owner + '</span>\n' +
-                                    '                    </div>')
-                            }
-                        } else {
-                            tip.tipMod({mod: 'wkAddMod',}, function () {
-                                $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
-                            })
-                        }
-                    } else {
-                        tip.tipMod({mod: 'wkAddMod',}, function () {
-                            $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
-                        })
-                    }
-                },
-                error: function () {
-                    $("#wkAddMod").modal('hide');
-                    tip.tipBox({type: 'err', title: '错误', text: "服务器故障！"}, true)
-                }
-            })
+        ctrFn.resPage.cellFlag = true;
+        ctrFn.resArray = [];
+        ctrFn.addWorker();
+        $("#wkAddMod .resume-search-btn").unbind().bind("click", function () {
+            ctrFn.addWorker();
         })
-
+        $(document).keydown(function (e) {
+            if (e.keyCode == 13){
+                ctrFn.addWorker();
+            }
+        })
     })
+
 })
