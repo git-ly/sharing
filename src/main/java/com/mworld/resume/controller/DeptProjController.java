@@ -32,20 +32,19 @@ public class DeptProjController extends BaseController {
 
     @RequestMapping(value = "{option}/searchList", method = RequestMethod.POST)
     public void getSearchList(HttpServletRequest request, HttpServletResponse response, @PathVariable("option") String option) {
-        String startStr = request.getParameter("start");
-        String sizeStr = request.getParameter("size");
-        Integer start = StringUtils.isEmpty(startStr) ? 1 : Integer.valueOf(startStr);
-        Integer size = StringUtils.isEmpty(sizeStr) ? 9 : Integer.valueOf(sizeStr);
+        Integer start = StringUtils.isEmpty(request.getParameter("start")) ? 1 : Integer.valueOf(request.getParameter("start"));
+        Integer size = StringUtils.isEmpty(request.getParameter("size")) ? 9 : Integer.valueOf(request.getParameter("size"));
+        String keyword = request.getParameter("keyword");
         Integer count;
         switch (option) {
             case "dpt":
-                String dptName = request.getParameter("dptName");
-                count = deptProjService.findDptsCnt(dptName);
+//                String dptName = request.getParameter("dptName");
+                count = deptProjService.findDptsCnt(keyword);
                 if (null == count || count < 1) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
                 }
-                List<Department> dpts = deptProjService.findDpts(dptName, start, size);
+                List<Department> dpts = deptProjService.findDpts(keyword, start, size);
                 if (CollectionUtils.isEmpty(dpts)) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;

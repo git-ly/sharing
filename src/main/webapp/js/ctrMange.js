@@ -1,10 +1,12 @@
 var ctrFn = {
     optCtr: '',
     optPro: '',
+    searchType: '',
     ctrPage: {flag: true, cnt: 0},
     proPage: {flag: true, cnt: 0},
     resPage: {flag: true, cnt: 0, cellFlag: true, cellCnt: 0},
     resArray: [],
+    tmpPage: {currentPage: 1, pageSize: 9, totalPages: 0},
     url: {
         dptList: host + "organize/dpt/searchList",
         proList: host + "organize/proOfDpt/searchList",
@@ -105,12 +107,37 @@ var ctrFn = {
     },
     initSearchBox: function () {
         $("#search").hide();
-        $("#ctr-center .glyphicon-search,#pro-center .glyphicon-search,#worker-center .glyphicon-search").unbind().bind("click", function () {
+        $(".tar-center .panel-title .glyphicon-search").unbind().bind("click", function () {
+            $("#search").find("strong").text($(this).attr("search-content"));
+            ctrFn.searchType = $(this).attr("search-content");
             $("#search").show(500);
         })
         $(document).keydown(function (e) {
             if (e.keyCode == 27)
                 $("#search").hide(500);
+        });
+    },
+    pageTool:function(init, callback) {
+        init.box.jqPaginator({
+            first: init.first ? init.first : null,
+            prev: init.prev ? init.prev : '<li class="prev">&lt;</li>',
+            next: init.next ? init.next : '<li class="prev">&gt;</li>',
+            last: init.last ? init.last : null,
+            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+            // totalPages: 5,
+            totalCounts: init.totalCounts,
+            pageSize: init.pageSize ? init.pageSize : 9,
+            currentPage: init.currentPage ? init.currentPage : 1,
+            visiblePages: init.visiblePages ? init.visiblePages : 7,
+            disableClass: 'disabled',
+            activeClass: 'active',
+            onPageChange: function (n) {
+                ctrFn.tmpPage.currentPage = n;
+                ctrFn.tmpPage.pageSize = this.pageSize;
+                ctrFn.tmpPage.totalPages = this.totalPages;
+                if (typeof  callback == "function")
+                    callback();
+            }
         });
     },
     initCtrList: function (start, size) {
@@ -203,25 +230,13 @@ var ctrFn = {
                             '        </div>')
                     }
 
+
                     while (ctrFn.proPage.flag) {
-                        $(".pro-box").jqPaginator({
-                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
-                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
-                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
-                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
-                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
-                            // totalPages: 5,
-                            totalCounts: ctrFn.proPage.cnt,
-                            pageSize: 9,
-                            currentPage: 1,
-                            visiblePages: 7,
-                            disableClass: 'disabled',
-                            activeClass: 'active',
-                            onPageChange: function (n) {
-                                ctrFn.findPrt(id, n, this.pageSize);
-                                $("#pro-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
-                            }
+                        ctrFn.pageTool({box: $(".pro-box"), totalCounts: ctrFn.proPage.cnt}, function () {
+                            ctrFn.findPrt(id, ctrFn.tmpPage.currentPage, ctrFn.tmpPage.pageSize);
+                            $("#pro-center").find(".panel-heading").find("strong").find(".badge").text(ctrFn.tmpPage.currentPage + "/" + ctrFn.tmpPage.totalPages);
                         });
+
                         ctrFn.proPage.flag = false;
                     }
                     $("#pro-center .roadmap-item").unbind().bind("click", function () {
@@ -265,24 +280,11 @@ var ctrFn = {
                             '        </div>')
                     }
                     while (ctrFn.resPage.flag) {
-                        $(".res-box").jqPaginator({
-                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
-                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
-                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
-                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
-                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
-                            // totalPages: 5,
-                            totalCounts: ctrFn.resPage.cnt,
-                            pageSize: 9,
-                            currentPage: 1,
-                            visiblePages: 7,
-                            disableClass: 'disabled',
-                            activeClass: 'active',
-                            onPageChange: function (n) {
-                                ctrFn.findWorker(ctrId, proId, n, this.pageSize);
-                                $("#worker-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
-                            }
-                        });
+
+                        ctrFn.pageTool({box: $(".res-box"), totalCounts: ctrFn.resPage.cnt}, function () {
+                            ctrFn.findWorker(ctrId, proId, ctrFn.tmpPage.currentPage, ctrFn.tmpPage.pageSize);
+                            $("#worker-center").find(".panel-heading").find("strong").find(".badge").text(ctrFn.tmpPage.currentPage + "/" + ctrFn.tmpPage.totalPages);
+                        })
                         ctrFn.resPage.flag = false;
                     }
                 } else {
@@ -302,7 +304,7 @@ var ctrFn = {
                 data: {
                     start: start,
                     size: size,
-                    keyword :$("#wkAddMod").find(".keyword-input").val(),
+                    keyword: $("#wkAddMod").find(".keyword-input").val(),
                     ctrId: ctrFn.optCtr,
                     proId: ctrFn.optPro
                 },
@@ -312,7 +314,6 @@ var ctrFn = {
                         $("#wkAddMod").find(".worker-list").html("");
                         if (result.target && result.target.data && result.target.data.length > 0) {
                             ctrFn.resPage.cellCnt = result.target.counts;
-                            console.info(ctrFn.resPage.cellCnt);
                             for (var i = 0; i < result.target.data.length; i++) {
 
                                 $("#wkAddMod").find(".worker-list").append('<div class="worker-list-item" wkId="' + result.target.data[i].id + '">\n' +
@@ -327,25 +328,19 @@ var ctrFn = {
                                     $(".worker-list").find("[wkId='" + ctrFn.resArray[j] + "']").addClass("select");
                                 }
                             }
-
                             while (ctrFn.resPage.cellFlag) {
-                                $(".worker-page-box").jqPaginator({
+                                ctrFn.pageTool({
+                                    box : $(".worker-page-box"),
+                                    totalCounts: ctrFn.resPage.cellCnt,
                                     first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
                                     prev: '<li class="prev"><a href="javascript:void(0);">上一页</a></li>',
                                     next: '<li class="next"><a href="javascript:void(0);">下一页</a></li>',
                                     last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
-                                    page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
-                                    // totalPages: 5,
-                                    totalCounts: ctrFn.resPage.cellCnt,
                                     pageSize: 12,
-                                    currentPage: 1,
-                                    visiblePages: 3,
-                                    disableClass: 'disabled',
-                                    activeClass: 'active',
-                                    onPageChange: function (n) {
-                                        ctrFn.addWorker(n, this.pageSize)
-                                    }
-                                });
+                                    visiblePages: 3
+                                }, function () {
+                                    ctrFn.addWorker(ctrFn.tmpPage.currentPage, ctrFn.tmpPage.pageSize);
+                                })
                                 ctrFn.resPage.cellFlag = false;
                             }
                         } else {
@@ -451,10 +446,11 @@ $(function () {
             ctrFn.addWorker();
         })
         $(document).keydown(function (e) {
-            if (e.keyCode == 13){
+            if (e.keyCode == 13) {
                 ctrFn.addWorker();
             }
         })
     })
-
 })
+
+

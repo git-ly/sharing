@@ -161,7 +161,7 @@
         <h3 class="panel-title">
             <strong>中心<span class="badge"></span></strong>
             <span class="pull-right glyphicon glyphicon-plus"></span>
-            <span class="pull-right glyphicon glyphicon-search"></span>
+            <span class="pull-right glyphicon glyphicon-search" search-content="中心"></span>
         </h3>
     </div>
     <div class="panel-body">
@@ -176,7 +176,7 @@
             <strong>项目<span class="badge"></span></strong>
             <span class="process"></span>
             <span class="pull-right glyphicon glyphicon-plus"></span>
-            <span class="pull-right glyphicon glyphicon-search"></span>
+            <span class="pull-right glyphicon glyphicon-search" search-content="项目"></span>
         </h3>
     </div>
     <div class="panel-body">
@@ -191,7 +191,7 @@
             <strong>人员<span class="badge"></span></strong>
             <span class="process"></span><span class="process"></span>
             <span class="pull-right glyphicon glyphicon-plus"></span>
-            <span class="pull-right glyphicon glyphicon-search"></span>
+            <span class="pull-right glyphicon glyphicon-search" search-content="人员"></span>
         </h3>
     </div>
     <div class="panel-body">
@@ -201,6 +201,7 @@
 </div>
 
 <div class="input-group col-lg-5 col-lg-offset-2" id="search">
+    <span class="input-group-addon"><strong>中心</strong></span>
     <input class="form-control input-lg" type="search" placeholder="搜索关键字">
     <span class="input-group-addon btn btn-default"><span class="glyphicon glyphicon-search"></span></span>
 </div>
