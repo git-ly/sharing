@@ -22,10 +22,11 @@
     <style>
         .loading {
             display: inline-block;
-            background: url("/css/images/gif/loding.gif");
+            background: url("/css/images/gif/loding.gif") no-repeat calc(50% - 45px);
             background-size: 89px 90px;
-            width: 89px;
+            width: 100%;
             height: 90px;
+            text-align: center;
         }
 
         .loading:after{

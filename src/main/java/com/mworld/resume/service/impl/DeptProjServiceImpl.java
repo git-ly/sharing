@@ -62,9 +62,9 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<Project> findPrjOfDpt(Integer dptId, Integer start, Integer size) {
+    public List<Project> findPrjOfDpt(Integer dptId, String keyword, Integer start, Integer size) {
         PageUtil pageUtil = new PageUtil(start, size);
-        return deptProjDao.findPrjOfDpt(dptId, pageUtil.getStart(), pageUtil.getSize());
+        return deptProjDao.findPrjOfDpt(dptId, keyword, pageUtil.getStart(), pageUtil.getSize());
     }
 
     @Override
@@ -127,9 +127,9 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<Resume> findResumeOfPro(Integer ctrId, Integer proId, Integer start, Integer size) {
+    public List<Resume> findResumeOfPro(Integer ctrId, Integer proId, String keyword, Integer start, Integer size) {
         PageUtil pageUtil = new PageUtil(start, size);
-        return deptProjDao.findResumeOfPro(ctrId, proId, pageUtil.getStart(), pageUtil.getSize());
+        return deptProjDao.findResumeOfPro(ctrId, proId, keyword, pageUtil.getStart(), pageUtil.getSize());
     }
 
     @Override
@@ -140,8 +140,8 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Integer findPrjOfDptCnt(Integer dptId) {
-        return deptProjDao.findPrjOfDptCnt(dptId);
+    public Integer findPrjOfDptCnt(Integer dptId, String keyword) {
+        return deptProjDao.findPrjOfDptCnt(dptId, keyword);
     }
 
     @Override
@@ -152,17 +152,17 @@ public class DeptProjServiceImpl implements DeptProjService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Integer findResumeOfProCnt(Integer ctrId, Integer proId) {
-        return deptProjDao.findResumeOfProCnt(ctrId, proId);
+    public Integer findResumeOfProCnt(Integer ctrId, Integer proId, String keyword) {
+        return deptProjDao.findResumeOfProCnt(ctrId, proId, keyword);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Integer saveResProShip(Integer dptId, Integer proId, String[] resumes) {
         Integer dpPrId = deptProjDao.findDptPrjId(dptId, proId);
-        if (dpPrId == null || dpPrId <=0)
+        if (dpPrId == null || dpPrId <= 0)
             return null;
-        return  deptProjDao.saveResProShip(dpPrId, resumes);
+        return deptProjDao.saveResProShip(dpPrId, resumes);
     }
 
     @Override

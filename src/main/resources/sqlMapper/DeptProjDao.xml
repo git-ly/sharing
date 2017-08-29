@@ -24,6 +24,9 @@
         SELECT p.id,p.pro_name FROM project p
         RIGHT JOIN dpt_prj_mid m ON p.id=m.prj_id
         WHERE m.dpt_id=#{dptId}
+        <if test="keyword != null and keyword != ''">
+            AND p.pro_name LIKE concat('%', concat(#{keyword}, '%'))
+        </if>
         ORDER BY p.id
         limit #{start}, #{size}
     </select>
@@ -32,6 +35,9 @@
         SELECT count(p.id) FROM project p
         RIGHT JOIN dpt_prj_mid m ON p.id=m.prj_id
         WHERE m.dpt_id=#{dptId}
+        <if test="keyword != null and keyword != ''">
+            AND p.pro_name LIKE concat('%', concat(#{keyword}, '%'))
+        </if>
     </select>
 
     <select id="findDptCntByName" resultType="int">
@@ -80,10 +86,10 @@
     </insert>
 
     <insert id="saveProAndDpts" parameterType="java.util.List">
-      INSERT INTO dpt_prj_mid(dpt_id,prj_id) VALUES
-      <foreach collection="list" item="dpt" separator=",">
-          (#{dpt},#{proId})
-      </foreach>
+        INSERT INTO dpt_prj_mid(dpt_id,prj_id) VALUES
+        <foreach collection="list" item="dpt" separator=",">
+            (#{dpt},#{proId})
+        </foreach>
     </insert>
 
     <select id="findDptsTotal" resultType="Department">
@@ -121,6 +127,9 @@
         ON m.dpt_prj_id=dp.id
         WHERE dp.dpt_id=#{ctrId}
         AND dp.prj_id=#{proId}
+        <if test="keyword != null and keyword !=''">
+            AND r.owner LIKE concat('%', concat(#{keyword}, '%'))
+        </if>
         ORDER BY r.id
         limit #{start}, #{size}
     </select>
@@ -135,10 +144,13 @@
         ON m.dpt_prj_id=dp.id
         WHERE dp.dpt_id=#{ctrId}
         AND dp.prj_id=#{proId}
+        <if test="keyword != null and keyword !=''">
+            AND r.owner LIKE concat('%', concat(#{keyword}, '%'))
+        </if>
     </select>
-    
+
     <insert id="saveResProShip" parameterType="map">
-        insert into dpt_prj_res_mid VALUES 
+        insert into dpt_prj_res_mid VALUES
         <foreach collection="resumes" item="it" separator=",">
             (#{dptPrjId},#{it})
         </foreach>

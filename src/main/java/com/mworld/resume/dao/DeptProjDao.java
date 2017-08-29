@@ -17,9 +17,9 @@ public interface DeptProjDao {
 
     public Integer saveDptPrj(@Param("dptId") Integer dptName, @Param("proId") Integer proId);
 
-    public List<Project> findPrjOfDpt(@Param("dptId") Integer dptId, @Param("start") Integer start, @Param("size") Integer size);
+    public List<Project> findPrjOfDpt(@Param("dptId") Integer dptId, @Param("keyword") String keyword, @Param("start") Integer start, @Param("size") Integer size);
 
-    public Integer findPrjOfDptCnt(@Param("dptId") Integer dptId);
+    public Integer findPrjOfDptCnt(@Param("dptId") Integer dptId, @Param("keyword") String keyword);
 
     public Integer findDptCntByName(String dptName);
 
@@ -45,9 +45,9 @@ public interface DeptProjDao {
 
     public Integer findDptsCnt(@Param("dptName") String dptName);
 
-    public List<Resume> findResumeOfPro(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId, @Param("start") Integer start, @Param("size") Integer size);
+    public List<Resume> findResumeOfPro(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId, @Param("keyword") String keyword, @Param("start") Integer start, @Param("size") Integer size);
 
-    public Integer findResumeOfProCnt(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId);
+    public Integer findResumeOfProCnt(@Param("ctrId") Integer ctrId, @Param("proId") Integer proId, @Param("keyword") String keyword);
 
     public Integer saveResProShip(@Param("dptPrjId") Integer dptPrjId, @Param("resumes") String[] resumes);
 

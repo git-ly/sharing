@@ -67,12 +67,12 @@ public class DeptProjController extends BaseController {
                     responseMsg(response, new Message<>(false, NoticeConst.LACK_PARAMETERS));
                     return;
                 }
-                count = deptProjService.findPrjOfDptCnt(Integer.valueOf(dptId.trim()));
+                count = deptProjService.findPrjOfDptCnt(Integer.valueOf(dptId.trim()), keyword);
                 if (null == count || count < 1) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
                 }
-                List<Project> projects = deptProjService.findPrjOfDpt(Integer.valueOf(dptId.trim()), start, size);
+                List<Project> projects = deptProjService.findPrjOfDpt(Integer.valueOf(dptId.trim()), keyword, start, size);
                 if (CollectionUtils.isEmpty(projects)) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
@@ -87,12 +87,12 @@ public class DeptProjController extends BaseController {
                     responseMsg(response, new Message<>(false, NoticeConst.LACK_PARAMETERS));
                     return;
                 }
-                count = deptProjService.findResumeOfProCnt(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()));
+                count = deptProjService.findResumeOfProCnt(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()), keyword);
                 if (null == count || count < 1) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
                 }
-                List<Resume> resumes = deptProjService.findResumeOfPro(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()), start, size);
+                List<Resume> resumes = deptProjService.findResumeOfPro(Integer.valueOf(dptId2.trim()), Integer.valueOf(proId.trim()), keyword, start, size);
                 if (CollectionUtils.isEmpty(resumes)) {
                     responseMsg(response, new Message<>(false, NoticeConst.NO_DATA_NOTICE));
                     return;
@@ -225,16 +225,16 @@ public class DeptProjController extends BaseController {
 
     @RequestMapping(value = "createShip", method = RequestMethod.POST)
     @ResponseBody
-    public void createShip(HttpServletRequest request, HttpServletResponse response){
+    public void createShip(HttpServletRequest request, HttpServletResponse response) {
         Integer dptId = StringUtils.isEmpty(request.getParameter("ctrId")) ? null : Integer.valueOf(request.getParameter("ctrId").trim());
         Integer proId = StringUtils.isEmpty(request.getParameter("proId")) ? null : Integer.valueOf(request.getParameter("proId").trim());
         String[] resumes = StringUtils.isEmpty(request.getParameter("workers")) ? null : request.getParameter("workers").split(",");
-        if (dptId == null || proId == null || resumes == null){
+        if (dptId == null || proId == null || resumes == null) {
             responseMsg(response, new Message(false, NoticeConst.LACK_PARAMETERS));
             return;
         }
         Integer cnt = deptProjService.saveResProShip(dptId, proId, resumes);
-        if (cnt == null || cnt <=0){
+        if (cnt == null || cnt <= 0) {
             responseMsg(response, new Message(false, NoticeConst.DATA_SAVE_FAIL));
             return;
         }
