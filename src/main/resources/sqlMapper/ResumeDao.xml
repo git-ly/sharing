@@ -107,6 +107,24 @@
         now())
     </insert>
 
+    <update id="updateResume" parameterType="com.mworld.resume.vo.ResumeModifyVo">
+        UPDATE resume SET
+        owner = #{owner, jdbcType=VARCHAR},
+        graduate_time = #{graduateTime, jdbcType=DATE},
+        education = #{education, jdbcType=VARCHAR},
+        major = #{major, jdbcType=VARCHAR},
+        dpt_id = #{dptId}
+        <if test="fileName!=null">
+            ,file_name = #{fileName, jdbcType=VARCHAR},
+            file_path = #{filePath, jdbcType=VARCHAR},
+            file_type = #{fileType, jdbcType=VARCHAR},
+            dest_name = #{destName, jdbcType=VARCHAR},
+            upload_time = now(),
+            uploader_id = #{uploadId, jdbcType=VARCHAR}
+        </if>
+        WHERE id = #{resumeId, jdbcType=VARCHAR}
+    </update>
+
     <select id="findResumeDetail" parameterType="com.mworld.resume.vo.ResumeRequestVo"
             resultType="com.mworld.resume.vo.ResumeMapVo">
         select
@@ -179,5 +197,21 @@
                 </if>
             </if>
         </where>
+    </select>
+    
+    <select id="findResumeInfoById" resultType="com.mworld.resume.vo.ResumeModifyVo">
+        SELECT
+        r.id 'resumeId',
+        r.owner,
+        r.graduate_time 'graduateTime',
+        r.file_path 'filePath',
+        r.file_name 'fileName',
+        r.education,
+        r.major,
+        r.dpt_id 'dptId',
+        d.dpt_name 'dptName'
+        FROM resume r, department d
+        WHERE r.id = #{id}
+        AND r.dpt_id = d.id
     </select>
 </mapper>

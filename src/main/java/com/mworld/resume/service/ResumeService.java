@@ -2,6 +2,7 @@ package com.mworld.resume.service;
 
 import com.mworld.resume.po.Resume;
 import com.mworld.resume.vo.ResumeMapVo;
+import com.mworld.resume.vo.ResumeModifyVo;
 import com.mworld.resume.vo.ResumeRequestVo;
 
 import java.util.List;
@@ -23,5 +24,8 @@ public interface ResumeService {
 
     public Integer findResumeDetailCnt(ResumeRequestVo options);
 
+    public ResumeModifyVo findResumeInfo(String id);
+
+    public Integer updateResume(ResumeModifyVo resume);
 
 }

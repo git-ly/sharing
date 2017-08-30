@@ -11,7 +11,7 @@ jQuery(function () {
         // swf文件路径
         swf: host + 'webuploader-0.1.5/Uploader.swf',
         // 文件接收服务端。
-        server: 'http://localhost:8090/resume/uploadResume',
+        server: 'http://localhost:8080/resume/uploadResume',
         // 不压缩image
         resize: false,
 
@@ -199,7 +199,6 @@ $("#resume-upload").bootstrapValidator({
         }
     }
 })
-
 $(function () {
     $.ajax({
         url: host + 'organize/dpsTotal/searchList',

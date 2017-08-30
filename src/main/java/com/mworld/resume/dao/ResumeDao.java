@@ -2,6 +2,7 @@ package com.mworld.resume.dao;
 
 import com.mworld.resume.po.Resume;
 import com.mworld.resume.vo.ResumeMapVo;
+import com.mworld.resume.vo.ResumeModifyVo;
 import com.mworld.resume.vo.ResumeRequestVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,8 @@ public interface ResumeDao {
     public List<ResumeMapVo> findResumeDetail(@Param("options") ResumeRequestVo options, @Param("start") Integer start, @Param("size") Integer size);
 
     public Integer findResumeDetailCnt(@Param("options") ResumeRequestVo options);
+
+    public ResumeModifyVo findResumeInfoById(String id);
+
+    public Integer updateResume(ResumeModifyVo resume);
 }

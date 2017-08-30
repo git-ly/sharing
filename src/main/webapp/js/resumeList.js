@@ -8,7 +8,7 @@ $(function () {
     var resumeList = {
         listTmp: $('<tr>' +
             '<td></td>' +
-            '<td></td>' +
+            '<td><a></a></td>' +
             '<td></td>' +
             '<td></td>' +
             '<td></td>' +
@@ -56,7 +56,7 @@ $(function () {
                             var item = list[i];
                             var clone = resumeList.listTmp.clone();
                             $("td:eq(0)", clone).text(i + 1);
-                            $("td:eq(1)", clone).text(item.owner);
+                            $("td:eq(1) a", clone).text(item.owner).attr("resumeId", item.id);
                             $("td:eq(2)", clone).text(item.education);
                             $("td:eq(3)", clone).text(item.major);
                             $("td:eq(4)", clone).text(resumeList.formatDate(item.graduateTime, true));

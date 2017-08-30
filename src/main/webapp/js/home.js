@@ -117,4 +117,10 @@ $(function () {
     $("#exit-btn").unbind().bind("click", function () {
         document.location.href = host + "logout";
     })
+
+    $(".main-contain").on('click','.resume-list tr a',function(){
+        var id = $(this).attr("resumeId");
+        var url = "/resumeModify"
+        $(".main-contain").html('<span class="loading"></span>').load(host + "resume/" + id + url);
+    })
 })

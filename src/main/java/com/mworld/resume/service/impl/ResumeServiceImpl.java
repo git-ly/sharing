@@ -5,6 +5,7 @@ import com.mworld.resume.dao.ResumeDao;
 import com.mworld.resume.po.Resume;
 import com.mworld.resume.service.ResumeService;
 import com.mworld.resume.vo.ResumeMapVo;
+import com.mworld.resume.vo.ResumeModifyVo;
 import com.mworld.resume.vo.ResumeRequestVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,5 +59,16 @@ public class ResumeServiceImpl implements ResumeService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public Integer findResumeDetailCnt(ResumeRequestVo options) {
         return resumeDao.findResumeDetailCnt(options);
+    }
+
+    @Override
+    public ResumeModifyVo findResumeInfo(String id) {
+        return resumeDao.findResumeInfoById(id);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer updateResume(ResumeModifyVo resume) {
+        return resumeDao.updateResume(resume);
     }
 }
