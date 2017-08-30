@@ -2,20 +2,18 @@ package com.mworld.login.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mworld.common.BaseController;
+import com.mworld.common.Message;
+import com.mworld.common.ResponseVo;
 import com.mworld.common.ValidMsg;
 import com.mworld.common.annotation.Mark;
 import com.mworld.common.exception.NotLoginException;
 import com.mworld.login.po.User;
 import com.mworld.login.service.UserService;
 import com.mworld.login.util.Const;
-import com.mworld.common.Message;
-import com.mworld.common.ResponseVo;
 import com.mworld.login.util.RoleType;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -137,7 +135,7 @@ public class UserController extends BaseController {
         responseMsg(response, new Message(false, Const.NO_USER_DATA));
     }
 
-    @Mark("修改密码")
+    @Mark("管理员职位和密码")
     @RequestMapping(value = "{targetOpt}/update", method = RequestMethod.POST)
     @ResponseBody
     public void modifyIdentify(HttpServletRequest request, HttpServletResponse response, @PathVariable("targetOpt") String targetOpt) throws NotLoginException {
@@ -153,7 +151,7 @@ public class UserController extends BaseController {
                 responseMsg(response, new Message(false, Const.LOGIN_INFO_INCOMPLETE));
                 return;
             }
-            if (getLoginUser(request).equals(userId))
+            if (getLoginUser(request).getId().equals(userId))
                 hasUpdate = userService.updatePwdById(newPwd, userId, getLoginUser(request).getRole());
             else
                 hasUpdate = userService.updatePwdById(newPwd, userId, getLoginUser(request).getRole() + 1);
@@ -173,7 +171,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "validAcct", method = RequestMethod.POST)
     @ResponseBody
-    public void acctValid(HttpServletRequest request, HttpServletResponse response){
+    public void acctValid(HttpServletRequest request, HttpServletResponse response) {
         String acct = request.getParameter("account");
         if ("bolom".equals(acct))
             if (userService.checkUser(acct) > 0) {
@@ -184,4 +182,21 @@ public class UserController extends BaseController {
         responseMsg(response, new ValidMsg(true));
     }
 
+    @Mark("管理员职位和密码")
+    @RequestMapping(value = "resetPwd", method = RequestMethod.POST)
+    @ResponseBody
+    public void resetPwd(HttpServletRequest request, HttpServletResponse response) throws NotLoginException {
+        String oldPwd = request.getParameter("oldPwd");
+        String newPwd = request.getParameter("newPwd");
+        if (StringUtils.isEmpty(oldPwd) || StringUtils.isEmpty(newPwd)) {
+            responseMsg(response, new Message(false, Const.LOGIN_INFO_INCOMPLETE));
+            return;
+        }
+        Integer cnt = userService.updatePwd(getLoginUser(request).getId(), oldPwd, newPwd);
+        if (cnt == null || cnt <= 0){
+            responseMsg(response, new Message(false, Const.UPDATE_FAIL));
+            return;
+        }
+        responseMsg(response, new Message(true, Const.UPDATE_SUCCESS));
+    }
 }

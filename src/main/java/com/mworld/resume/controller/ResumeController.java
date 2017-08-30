@@ -9,7 +9,6 @@ import com.mworld.resume.service.ResumeService;
 import com.mworld.common.Message;
 import com.mworld.common.ResponseVo;
 import com.mworld.resume.vo.ResumeMapVo;
-import com.mworld.resume.vo.ResumeModifyVo;
 import com.mworld.resume.vo.ResumeRequestVo;
 import com.mworld.util.DocConverter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -86,43 +85,6 @@ public class ResumeController extends BaseController {
             msg.setMsg("Some error happened when save the resume");
         }
         responseMsg(response, msg);
-
-    }
-
-    @RequestMapping(value = "modifyResume", method = RequestMethod.POST)
-    public String modifyResume(HttpServletRequest request, HttpServletResponse response){
-        Message message = new Message();
-        message.setSuccess(false);
-        String owner = request.getParameter("owner");
-        String resumeId = request.getParameter("resumeId");
-        String education = request.getParameter("education");
-        String graduateTime = request.getParameter("graduateTime");
-        Integer dptId = Integer.valueOf(request.getParameter("dptId"));
-        String fileName = request.getParameter("fileName");
-        String major = request.getParameter("major");
-        ResumeModifyVo resume = new ResumeModifyVo();
-        resume.setDptId(dptId);
-        resume.setEducation(education);
-        resume.setGraduateTime(graduateTime);
-        resume.setResumeId(resumeId);
-        resume.setOwner(owner);
-        resume.setMajor(major);
-        if (fileName != null){
-            String destFileName = getDestName(fileName);
-            resume.setUploadId(request.getSession().getAttribute("login_userId").toString());
-            resume.setFilePath(getTempFilePath(RESUME_DOC_UPLOAD_PATH));
-            resume.setFileName(fileName);
-            if (!StringUtils.isEmpty(getFileType(fileName)))
-                resume.setFileType(getFileType(fileName));
-            resume.setDestName(destFileName);
-        }
-        int result = resumeService.updateResume(resume);
-        if (result > 0){
-            message.setSuccess(true);
-            message.setMsg("Update Success");
-        }
-//        responseMsg(response, message);
-        return "resumeList";
     }
 
     @RequestMapping(value = "resumeList/{start}/{size}", method = RequestMethod.POST)
@@ -210,14 +172,6 @@ public class ResumeController extends BaseController {
         docConverter.convert();
         if (docConverter.convert())
             responseMsg(response, new Message<>(true, "js/swf/test2.swf"));
-    }
-
-    @RequestMapping(value = "/{id}/resumeModify", method = RequestMethod.GET)
-    public String resumeModify(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id){
-        ResumeModifyVo resume = resumeService.findResumeInfo(id);
-        request.getSession().setAttribute("resume", resume);
-        return "modifyResume";
-
     }
 
 

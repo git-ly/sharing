@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Integer updatePwd(String id, String oldPwd, String newPwd) {
+        return userDao.updatePwd(id, oldPwd, newPwd);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateUserRole(Integer newRole, String id, Integer tagRole) {
         Integer updateRows = userDao.updateUserRole(newRole, id, tagRole);

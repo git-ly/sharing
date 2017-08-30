@@ -1,5 +1,5 @@
 var tip = {
-    tipMod: function (init) {
+    tipMod: function (init,callback) {
         var $mod = init && init.mod ? $("#" + init.mod) : $("#tipMod");
         if (init) {
             if (init.title)
@@ -15,6 +15,8 @@ var tip = {
             if (init.sureBtnHide)
                 $mod.find(".sure-btn").hide();
         }
+        if (typeof callback == "function")
+            callback();
         $mod.modal();
     },
     tipBox: function (init, autoClose) {

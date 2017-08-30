@@ -24,4 +24,8 @@ public interface ResumeDao {
     public ResumeModifyVo findResumeInfoById(String id);
 
     public Integer updateResume(ResumeModifyVo resume);
+
+    public List<ResumeMapVo> findAllowResumes(@Param("options") ResumeMapVo options, @Param("start") Integer start, @Param("size") Integer size);
+
+    public Integer findAllowResumesCnt(@Param("options") ResumeMapVo options);
 }

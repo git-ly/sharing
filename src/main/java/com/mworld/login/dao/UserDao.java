@@ -25,6 +25,8 @@ public interface UserDao {
 
     public Integer updatePwdById(@Param("newPwd") String newPwd, @Param("id") String id, @Param("tagRole") Integer tagRole);
 
+    public Integer updatePwd(@Param("id") String id, @Param("oldPwd") String oldPwd, @Param("newPwd") String newPwd);
+
     public Integer updateUserRole(@Param("newRole") Integer newRole, @Param("id") String id, @Param("tagRole") Integer tagRole);
 
 }

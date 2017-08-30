@@ -28,4 +28,7 @@ public interface ResumeService {
 
     public Integer updateResume(ResumeModifyVo resume);
 
+    public List<ResumeMapVo> findAllowResumes(ResumeMapVo options, Integer start, Integer size);
+
+    public Integer findAllowResumesCnt(ResumeMapVo options);
 }

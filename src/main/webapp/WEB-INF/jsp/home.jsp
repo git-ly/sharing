@@ -22,10 +22,18 @@
     <style>
         .loading {
             display: inline-block;
-            background: url("/css/images/gif/loding.gif");
+            background: url("/css/images/gif/loding.gif") no-repeat calc(50% - 45px);
             background-size: 89px 90px;
-            width: 89px;
+            width: 100%;
             height: 90px;
+            text-align: center;
+        }
+
+        .loading:after{
+            content: '玩命加载中…';
+            text-align: center;
+            line-height: 90px;
+            font-size: 6px;
         }
 
         .log_head {
@@ -104,10 +112,11 @@
         }
 
         .logo_browse.trans{
-            background: url("<%=basePath%>css/images/logo/logo1.png") no-repeat;
+            background: url("<%=basePath%>css/images/logo/logo6.png") no-repeat;
             background-size: 60px 60px;
             width: 60px;
             height: 60px;
+            -webkit-animation: logo-action 2s infinite;
         }
 
         /*.log_head div{*/
@@ -148,6 +157,24 @@
             right: 30px;
             min-width: 300px;
             min-height: 120px;
+        }
+        
+        @-webkit-keyframes logo-action {
+            0%{
+                transform: scale(1);
+            }
+            25%{
+                transform: scale(1.2);
+            }
+            50%{
+                transform: scale(1.3);
+            }
+            50%{
+                transform: scale(1.2);
+            }
+            25%{
+                transform: scale(1);
+            }
         }
     </style>
 </head>

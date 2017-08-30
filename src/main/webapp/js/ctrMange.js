@@ -1,8 +1,10 @@
 var ctrFn = {
-    optCtr: '',
+    opt: {ctrId: null, oprId: null, searchType: null},
     ctrPage: {flag: true, cnt: 0},
     proPage: {flag: true, cnt: 0},
-    resPage: {flag: true, cnt: 0},
+    resPage: {flag: true, cnt: 0, cellFlag: true, cellCnt: 0},
+    resArray: [],
+    tmpPage: {currentPage: 1, pageSize: 9, totalPages: 0},
     url: {
         dptList: host + "organize/dpt/searchList",
         proList: host + "organize/proOfDpt/searchList",
@@ -10,7 +12,9 @@ var ctrFn = {
         dptCheck: host + 'organize/dpt/checkExist',
         proCheck: host + 'organize/pro/checkExist',
         dptAdd: host + 'organize/dpt/add',
-        proAdd: host + 'organize/pro/add'
+        proAdd: host + 'organize/pro/add',
+        getResumes: host + 'resume/findResums',
+        resumeAdd: host + 'organize/createShip'
     },
     initMsgBox: function (init) {
         var $modal = init && init.modelId ? $("#" + init.modelId) : $("#alertModal");
@@ -29,7 +33,7 @@ var ctrFn = {
     },
     addOpt: function (options, optionCtr) {
         options.dom.unbind().bind("click", function () {
-            if (optionCtr && !ctrFn.optCtr) {
+            if (optionCtr && !ctrFn.opt.ctrId) {
                 tip.tipBox({type: 'warn', text: "请先选择中心"});
                 return;
             }
@@ -45,7 +49,7 @@ var ctrFn = {
                 }
                 options.ajax.checkData.checkName = options.checkCtx.val();
                 if (optionCtr) {
-                    options.ajax.checkData.ctrId = ctrFn.optCtr;
+                    options.ajax.checkData.ctrId = ctrFn.opt.ctrId;
                 }
                 $.ajax({
                     url: options.ajax.url,
@@ -64,7 +68,7 @@ var ctrFn = {
                         $("#alertModal .commit-btn").unbind().bind("click", function () {
                             var saveData = {
                                 saveName: $("#alertModal [name='checkName']").val(),
-                                ctrId: ctrFn.optCtr
+                                ctrId: ctrFn.opt.ctrId
                             };
 
                             $.ajax({
@@ -101,7 +105,9 @@ var ctrFn = {
     },
     initSearchBox: function () {
         $("#search").hide();
-        $("#ctr-center .glyphicon-search,#pro-center .glyphicon-search,#worker-center .glyphicon-search").unbind().bind("click", function () {
+        $(".tar-center .panel-title .glyphicon-search").unbind().bind("click", function () {
+            $("#search").find("strong").text($(this).attr("search-content"));
+            ctrFn.opt.searchType = $(this).attr("search-content");
             $("#search").show(500);
         })
         $(document).keydown(function (e) {
@@ -109,15 +115,56 @@ var ctrFn = {
                 $("#search").hide(500);
         });
     },
+    pageTool: function (init, callback) {
+        init.box.jqPaginator({
+            first: init.first ? init.first : null,
+            prev: init.prev ? init.prev : '<li class="prev">&lt;</li>',
+            next: init.next ? init.next : '<li class="next">&gt;</li>',
+            last: init.last ? init.last : null,
+            page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+            // totalPages: 5,
+            totalCounts: init.totalCounts,
+            pageSize: init.pageSize ? init.pageSize : 9,
+            currentPage: init.currentPage ? init.currentPage : 1,
+            visiblePages: init.visiblePages ? init.visiblePages : 0,
+            disableClass: 'disabled',
+            activeClass: 'active',
+            onPageChange: function (n) {
+                ctrFn.tmpPage.currentPage = n;
+                ctrFn.tmpPage.pageSize = this.pageSize;
+                ctrFn.tmpPage.totalPages = this.totalPages;
+                if (typeof  callback == "function")
+                    callback();
+            }
+        });
+    },
+    initCtrSpace: function () {
+        $("#ctr-center").find(".panel-heading").find("strong").find(".badge").text('0/0');
+        $("#worker-center .panel-body").text("未查询到数据");
+        ctrFn.ctrPage.flag = true;
+        $(".ctr-box").html('');
+    },
+    initProSpace: function () {
+        $("#pro-center").find(".panel-heading").find("strong").find(".badge").text('0/0');
+        $("#worker-center .panel-body").text("请选择中心");
+        ctrFn.proPage.flag = true;
+        $(".pro-box").html('');
+    },
+    initWorkerSpace: function () {
+        $("#worker-center").find(".panel-heading").find("strong").find(".badge").text('0/0');
+        $("#worker-center .panel-body").text("未选择项目");
+        ctrFn.resPage.flag = true;
+        ctrFn.resArray = [];
+        $(".res-box").html('');
+    },
     initCtrList: function (start, size) {
-        start = start ? start : 1;
-        size = size ? size : 9;
         $.ajax({
             url: ctrFn.url.dptList,
             type: 'POST',
             data: {
-                start: start,
-                size: size
+                keyword: ctrFn.opt.searchType && ctrFn.opt.searchType == "中心" ? $("#search input").val() : null,
+                start: start ? start : 1,
+                size: size ? size : 9
             },
             success: function (data) {
                 var result = JSON.parse(data);
@@ -132,25 +179,14 @@ var ctrFn = {
                             '            <span class="roadmap-title">' + list[i].dptName + '</span>\n' +
                             '        </div>');
                     }
+                    if (ctrFn.opt.ctrId) {
+                        $("#ctr-center .roadmap-item[ctrId='" + ctrFn.opt.ctrId + "']").addClass("active");
+                    }
                     while (ctrFn.ctrPage.flag) {
-                        $(".ctr-box").jqPaginator({
-                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
-                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
-                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
-                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
-                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
-                            // totalPages: 5,
-                            totalCounts: ctrFn.ctrPage.cnt,
-                            pageSize: 9,
-                            currentPage: 1,
-                            visiblePages: 0,
-                            disableClass: 'disabled',
-                            activeClass: 'active',
-                            onPageChange: function (n) {
-                                ctrFn.initCtrList(n, this.pageSize)
-                                $("#ctr-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
-                            }
-                        });
+                        ctrFn.pageTool({box: $(".ctr-box"), totalCounts: ctrFn.ctrPage.cnt}, function () {
+                            ctrFn.initCtrList(ctrFn.tmpPage.currentPage, ctrFn.tmpPage.pageSize);
+                            $("#ctr-center").find(".panel-heading").find("strong").find(".badge").text(ctrFn.tmpPage.currentPage + "/" + ctrFn.tmpPage.totalPages);
+                        })
                         ctrFn.ctrPage.flag = false;
                     }
 
@@ -166,7 +202,7 @@ var ctrFn = {
                             ctrFn.proPage.flag = true;
                             ctrFn.resPage.flag = true;
                             ctrFn.findPrt($(this).attr("ctrId"));
-                            ctrFn.optCtr = $(this).attr("ctrId");
+                            ctrFn.opt.ctrId = $(this).attr("ctrId");
                         }
                     })
                 } else {
@@ -176,15 +212,14 @@ var ctrFn = {
         })
     },
     findPrt: function (id, start, size) {
-        start = start ? start : 1;
-        size = size ? size : 9;
         $.ajax({
             url: ctrFn.url.proList,
             type: 'POST',
             data: {
                 ctrId: id,
-                start: start,
-                size: size
+                keyword: ctrFn.opt.searchType && ctrFn.opt.searchType == "项目" ? $("#search input").val() : null,
+                start: start ? start : 1,
+                size: size ? size : 9
             },
             success: function (data) {
                 var result = JSON.parse(data);
@@ -198,26 +233,16 @@ var ctrFn = {
                             '            <span class="roadmap-title">' + list[i].proName + '</span>\n' +
                             '        </div>')
                     }
+                    if (ctrFn.opt.proId) {
+                        $("#pro-center .roadmap-item[iProId='" + ctrFn.opt.proId + "']").addClass("active");
+                    }
 
                     while (ctrFn.proPage.flag) {
-                        $(".pro-box").jqPaginator({
-                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
-                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
-                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
-                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
-                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
-                            // totalPages: 5,
-                            totalCounts: ctrFn.proPage.cnt,
-                            pageSize: 9,
-                            currentPage: 1,
-                            visiblePages: 7,
-                            disableClass: 'disabled',
-                            activeClass: 'active',
-                            onPageChange: function (n) {
-                                ctrFn.findPrt(id, n, this.pageSize);
-                                $("#pro-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
-                            }
+                        ctrFn.pageTool({box: $(".pro-box"), totalCounts: ctrFn.proPage.cnt}, function () {
+                            ctrFn.findPrt(id, ctrFn.tmpPage.currentPage, ctrFn.tmpPage.pageSize);
+                            $("#pro-center").find(".panel-heading").find("strong").find(".badge").text(ctrFn.tmpPage.currentPage + "/" + ctrFn.tmpPage.totalPages);
                         });
+
                         ctrFn.proPage.flag = false;
                     }
                     $("#pro-center .roadmap-item").unbind().bind("click", function () {
@@ -228,6 +253,7 @@ var ctrFn = {
                         $("#worker-center").find(".panel-heading").find("strong").find(".badge").text("0/0");
                         ctrFn.resPage.flag = true;
                         ctrFn.findWorker($(this).attr("pCtrId"), $(this).attr("iProId"));
+                        ctrFn.opt.proId = $(this).attr("iProId");
                     });
                 } else {
                     $("#pro-center .panel-body").text("未查询到数据");
@@ -236,20 +262,19 @@ var ctrFn = {
         })
     },
     findWorker: function (ctrId, proId, start, size) {
-        start = start ? start : 1;
-        size = size ? size : 9;
         $.ajax({
             url: ctrFn.url.resumeList,
             type: 'POST',
             data: {
                 ctrId: ctrId,
                 proId: proId,
-                start: start,
-                size: size
+                keyword: ctrFn.opt.searchType && ctrFn.opt.searchType == "人员" ? $("#search input").val() : null,
+                start: start ? start : 1,
+                size: size ? size : 9
             },
             success: function (data) {
                 var result = JSON.parse(data);
-                $("#worker-center .panel-body").html("");
+                $("#worker-center .panel-body").html('');
                 if (result.success) {
                     var list = result.target.data;
                     ctrFn.resPage.cnt = result.target.counts;
@@ -260,24 +285,11 @@ var ctrFn = {
                             '        </div>')
                     }
                     while (ctrFn.resPage.flag) {
-                        $(".res-box").jqPaginator({
-                            // first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
-                            prev: '<li class="prev"><!--<a href="javascript:void(0);">&lt;</a>-->&lt;</li>',
-                            next: '<li class="next"><!--<a href="javascript:void(0);">&gt;</a>-->&gt;</li>',
-                            // last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
-                            // page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
-                            // totalPages: 5,
-                            totalCounts: ctrFn.resPage.cnt,
-                            pageSize: 9,
-                            currentPage: 1,
-                            visiblePages: 7,
-                            disableClass: 'disabled',
-                            activeClass: 'active',
-                            onPageChange: function (n) {
-                                ctrFn.findWorker(ctrId, proId, n, this.pageSize);
-                                $("#worker-center").find(".panel-heading").find("strong").find(".badge").text(n + "/" + this.totalPages);
-                            }
-                        });
+
+                        ctrFn.pageTool({box: $(".res-box"), totalCounts: ctrFn.resPage.cnt}, function () {
+                            ctrFn.findWorker(ctrId, proId, ctrFn.tmpPage.currentPage, ctrFn.tmpPage.pageSize);
+                            $("#worker-center").find(".panel-heading").find("strong").find(".badge").text(ctrFn.tmpPage.currentPage + "/" + ctrFn.tmpPage.totalPages);
+                        })
                         ctrFn.resPage.flag = false;
                     }
                 } else {
@@ -285,9 +297,125 @@ var ctrFn = {
                 }
             }
         })
+    },
+    searchByKeyword: function () {
+        switch (ctrFn.opt.searchType) {
+            case "中心":
+                ctrFn.initCtrSpace();
+                ctrFn.initCtrList();
+                break;
+            case "项目":
+                if (!ctrFn.opt.ctrId) {
+                    tip.tipBox({type: 'warn', text: '请选择中心后再操作！'}, true)
+                }
+                ctrFn.initProSpace();
+                ctrFn.findPrt(ctrFn.opt.ctrId);
+                break;
+            case "人员":
+                if (!ctrFn.opt.ctrId || !ctrFn.opt.proId) {
+                    tip.tipBox({type: 'warn', text: '请选择中心和项目后再操作！'}, true)
+                }
+                ctrFn.initWorkerSpace();
+                ctrFn.findWorker(ctrFn.opt.ctrId, ctrFn.opt.proId);
+                break;
+        }
+    },
+    addWorker: function (start, size) {
+        tip.tipMod({mod: 'wkAddMod',}, function () {
+            $("#wkAddMod").find(".worker-list").html('<span class="loading"></span>');
+            $.ajax({
+                url: ctrFn.url.getResumes,
+                type: 'POST',
+                data: {
+                    keyword: $("#wkAddMod").find(".keyword-input").val(),
+                    ctrId: ctrFn.opt.ctrId,
+                    proId: ctrFn.opt.proId,
+                    start: start ? start : 1,
+                    size: size ? size : 12
+                },
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    if (result && result.success) {
+                        $("#wkAddMod").find(".worker-list").html("");
+                        ctrFn.resPage.cellCnt = result.target.counts;
+                        for (var i = 0; i < result.target.data.length; i++) {
+                            $("#wkAddMod").find(".worker-list").append('<div class="worker-list-item" wkId="' + result.target.data[i].id + '">\n' +
+                                '                        <p><span class="glyphicon glyphicon-user"></span><span>' + result.target.data[i].owner + '</span></p>\n' +
+                                '                        <p><span class="glyphicon glyphicon-magnet"></span><span>' + result.target.data[i].education + '</span></p>\n' +
+                                '                        <p><span class="glyphicon glyphicon-tower"></span><span>' + result.target.data[i].major + '</span></p>\n' +
+                                '                    </div>')
+                        }
+
+                        if (ctrFn.resArray && ctrFn.resArray.length > 0) {
+                            for (var j = 0; j < ctrFn.resArray.length; j++) {
+                                $(".worker-list").find("[wkId='" + ctrFn.resArray[j] + "']").addClass("select");
+                            }
+                        }
+                        while (ctrFn.resPage.cellFlag) {
+                            ctrFn.pageTool({
+                                box: $(".worker-page-box"),
+                                totalCounts: ctrFn.resPage.cellCnt,
+                                first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
+                                prev: '<li class="prev"><a href="javascript:void(0);">上一页</a></li>',
+                                next: '<li class="next"><a href="javascript:void(0);">下一页</a></li>',
+                                last: '<li class="last"><a href="javascript:void(0);">尾页</a></li>',
+                                pageSize: 12,
+                                visiblePages: 3
+                            }, function () {
+                                ctrFn.addWorker(ctrFn.tmpPage.currentPage, ctrFn.tmpPage.pageSize);
+                            })
+                            ctrFn.resPage.cellFlag = false;
+                        }
+
+                    } else {
+                        $(".worker-page-box").html("");
+                        tip.tipMod({mod: 'wkAddMod',}, function () {
+                            $("#wkAddMod").find(".worker-list").html('<span>未查询到数据 </span>');
+                        })
+                    }
+                    $(".worker-list-item").unbind().bind("click", function () {
+                        if ($(this).hasClass("select")) {
+                            $(this).removeClass("select");
+                            ctrFn.resArray.splice(ctrFn.resArray.indexOf($(this).attr("wkId")), 1);
+                        } else {
+                            $(this).addClass("select");
+                            ctrFn.resArray.push($(this).attr("wkId"))
+                        }
+                    });
+                    $("#wkAddMod .modal-footer button:eq(1)").unbind().bind("click", function () {
+                        $.ajax({
+                            url: ctrFn.url.resumeAdd,
+                            type: 'post',
+                            data: {
+                                ctrId: ctrFn.opt.ctrId,
+                                proId: ctrFn.opt.proId,
+                                workers: ctrFn.resArray.toString()
+                            },
+                            success: function (data) {
+                                var result = JSON.parse(data);
+                                if (result && result.success) {
+                                    tip.tipBox({text: "添加成功，请刷新后查看"}, true);
+                                    $("#wkAddMod").modal('hide');
+                                } else {
+                                    tip.tipBox({text: "添加失败"}, true);
+                                    $("#wkAddMod").modal('hide');
+                                }
+                            },
+                            error: function () {
+                                tip.tipBox({type: 'err', text: "添加失败，服务器故障"}, true);
+                                $("#wkAddMod").modal('hide');
+                            }
+                        })
+                    });
+                },
+                error: function () {
+                    $("#wkAddMod").modal('hide');
+                    tip.tipBox({type: 'err', title: '错误', text: "服务器故障！"}, true)
+                }
+            })
+        })
     }
 }
-
 
 $(function () {
     ctrFn.initSearchBox();
@@ -325,8 +453,32 @@ $(function () {
     }, true);
 
     $("#worker-center .panel-title .glyphicon-plus").unbind().bind("click", function () {
-        tip.tipMod({
-            mod : 'wkAddMod'
+        if (!ctrFn.opt.ctrId || !ctrFn.opt.proId) {
+            tip.tipBox({type: 'warn', text: "请先选择中心和项目，再进行操作"});
+            return;
+        }
+        ctrFn.resPage.cellFlag = true;
+        ctrFn.resArray = [];
+        ctrFn.addWorker();
+        $("#wkAddMod .resume-search-btn").unbind().bind("click", function () {
+            ctrFn.addWorker();
+        })
+        $(document).keydown(function (e) {
+            if (e.keyCode == 13 && $("#wkAddMod .keyword-input").is(":focus")) {
+                ctrFn.resPage.cellFlag = true;
+                ctrFn.addWorker();
+            }
         })
     })
+
+    $("#search .btn").unbind().bind("click", function () {
+        ctrFn.searchByKeyword();
+    });
+
+    $(document).keydown(function (e) {
+        if (e.keyCode == 13 && $("#search input").is(":focus"))
+            ctrFn.searchByKeyword();
+    });
 })
+
+

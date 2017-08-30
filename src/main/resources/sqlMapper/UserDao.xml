@@ -56,6 +56,10 @@
         UPDATE user SET pwd=md5(#{newPwd}) WHERE id=#{id} AND role=#{tagRole}
     </update>
 
+    <update id="updatePwd">
+        UPDATE user SET pwd=md5(#{newPwd}) WHERE id=#{id} AND pwd=md5(#{oldPwd})
+    </update>
+
     <resultMap id="userMap" type="User">
         <id property="id" column="id"/>
         <result property="acct" column="acct"/>
